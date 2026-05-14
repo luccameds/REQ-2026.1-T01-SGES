@@ -39,7 +39,7 @@
 
 - **Revisões de Sprint:** Pelo menos um representante da organização estará diretamente envolvido nas revisões de sprint, realizadas ao término de cada ciclo de desenvolvimento, onde cada um desses ciclos possui a duração de 10 dias úteis. Nessas reuniões, poderá validar as entregas, testar as funcionalidades implementadas e fornecer feedback para orientar os próximos passos do projeto.
 
-- **Planejamento da Sprint:** Após o planejamento de cada sprint, será enviado via email para o cliente, um informativo indicando um conjunto de funcionalidades que serão desenvolvidas ao longo da sprint seguinte, com o intuito de validar e alinhar espectativas.
+- **Planejamento da Sprint:** Após o planejamento de cada sprint, será enviado via email para o cliente, um informativo indicando um conjunto de funcionalidades que serão desenvolvidas ao longo da sprint seguinte, com o intuito de validar e alinhar expectativas.
 
 ## 7.3. Processo de Validação
 
