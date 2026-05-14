@@ -1,4 +1,4 @@
-# Cronograma de Entregas (Modelo ScrumXP)
+# 6. Cronograma e Entregas (Modelo ScrumXP)
 
 Este cronograma reflete a abordagem ágil e incremental adotada pelo projeto SGES, integrando as fases de planeamento, design just-in-time e desenvolvimento iterativo.
 
