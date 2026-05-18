@@ -61,7 +61,6 @@ A complexidade reflete o esforço arquitetural e as horas de desenvolvimento nec
 | **RF22** | Gerar relatório de frequência       |      4      |         3          | **2º Quadrante**  |
 | **RF23** | Gerar relatório de impacto social   |      5      |         4          | **2º Quadrante**  |
 | **RF24** | Exportar matriz de dados em PDF     |      3      |         3          | **4º Quadrante**  |
-| **RF25** | Configurar parâmetros do sistema    |      3      |         3          | **4º Quadrante**  |
 
 ---
 
