@@ -5,7 +5,7 @@
 Para garantir a rastreabilidade estrutural do sistema, os requisitos funcionais e não funcionais foram mapeados de acordo com os seguintes módulos ou Características do Produto (CP):
 
 - **CP1 - Segurança e Controle de Acessos:** Autenticação, perfis, logs e adequação à LGPD.
-- **CP2 - Gestão de Instrutores:** Cadastro e controle da equipe de instrução e trabalho da ONG.
+- **CP2 - Gestão de Instrutores:** Cadastro e controle da equipe de instrução e trabalho da instituição.
 - **CP3 - Cadastro Sociodemográfico:** Informações demográficas de famílias e beneficiários.
 - **CP4 - Frequência e Engajamento:** Gestão de oficinas, matrículas e chamadas.
 - **CP5 - Monitoramento de Evasão:** Gatilhos, alertas e registro de intervenções sociais.
@@ -47,7 +47,7 @@ Para garantir a rastreabilidade estrutural do sistema, os requisitos funcionais 
 
 ## 3. Requisitos Não Funcionais (RNF)
 
-Os requisitos não funcionais definem os atributos de qualidade e restrições da solução. Eles foram desenhados para mitigar riscos técnicos diretamente ligados aos módulos de negócio (Características do Produto), garantindo que a infraestrutura atenda à realidade operacional da ONG.
+Os requisitos não funcionais definem os atributos de qualidade e restrições da solução. Eles foram desenhados para mitigar riscos técnicos diretamente ligados aos módulos de negócio (Características do Produto), garantindo que a infraestrutura atenda à realidade operacional da instituição.
 
 | ID        | Nome do Requisito           | Descrição Técnica e Métrica de Validação                                                                                                                                                                                              | Categoria (FURPS+) | Característica do Produto (CP)            |
 | :-------- | :-------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :----------------- | :---------------------------------------- |
@@ -60,5 +60,5 @@ Os requisitos não funcionais definem os atributos de qualidade e restrições d
 | **RNF07** | Desempenho Analítico        | O motor de relatórios não deve travar a sessão do Gestor durante agregações complexas de dados semestrais. **Métrica:** A geração do relatório de impacto social deve ocorrer em _background_, ou processada em menos de 10 segundos. | Desempenho         | **CP6 - Relatórios e Transparência**      |
 | **RNF08** | Carga Limite de Formulários | As telas de cadastro de núcleo familiar, por serem extensas, devem suportar interrupções e navegação fluida em conexões 3G. **Métrica:** _First Contentful Paint_ (FCP) da página de cadastro < 2.5s.                                 | Desempenho         | **CP3 - Cadastro Sociodemográfico**       |
 | **RNF09** | Concorrência de Matrículas  | O módulo de turmas deve suportar o pico de acessos durante os períodos de abertura de novas oficinas. **Métrica:** Suportar até 50 operações de _insert_ simultâneas por segundo sem apresentar _Deadlock_ no banco de dados.         | Desempenho         | **CP4 - Frequência e Engajamento**        |
-| **RNF10** | Prevenção de Inatividade    | Sessões esquecidas abertas em computadores da ONG devem ser derrubadas automaticamente. **Métrica:** Invalidação obrigatória do token JWT após 15 minutos sem requisições do _client-side_.                                           | Segurança          | **CP1 - Segurança e Controle de Acessos** |
+| **RNF10** | Prevenção de Inatividade    | Sessões esquecidas abertas em computadores da instituição devem ser derrubadas automaticamente. **Métrica:** Invalidação obrigatória do token JWT após 15 minutos sem requisições do _client-side_.                                   | Segurança          | **CP1 - Segurança e Controle de Acessos** |
 | **RNF11** | Extensibilidade da API      | O código desenvolvido pela equipe atual deve ser de fácil manutenção para futuras turmas de voluntários de TI. **Métrica:** Cobertura de documentação OpenAPI (Swagger) em 100% das rotas ativas.                                     | Manutenibilidade   | **CP7 - Arquitetura e Performance**       |
