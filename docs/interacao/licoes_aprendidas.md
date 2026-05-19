@@ -1,6 +1,6 @@
-# 11. Lições Aprendidas
+# 10. Lições Aprendidas
 
-## 11.1. Unidade 1
+## 10.1. Unidade 1
 
 ### Lições Aprendidas e Melhorias para o Processo
 
@@ -24,7 +24,7 @@
 
 ---
 
-## 11.2. Unidade 2
+## 10.2. Unidade 2
 
 ### Lições Aprendidas e Melhorias para o Processo
 
