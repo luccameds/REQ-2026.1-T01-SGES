@@ -1,4 +1,4 @@
-# 6. Cronograma e Entregas (Ciclo de Vida OpenUP)
+# 7. Cronograma e Entregas (Ciclo de Vida OpenUP)
 
 Este cronograma reflete o ciclo de vida iterativo e incremental do framework **OpenUP** adaptado para o projeto SGES. O desenvolvimento de código inicia-se imediatamente após a validação dos requisitos do MVP na Unidade 2.
 

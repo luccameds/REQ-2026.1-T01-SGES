@@ -11,7 +11,7 @@ Minimizar a descentralização e o espalhamento das informações dos participan
 - **OE3**: Apoiar a tomada de decisão estratégica da diretoria por meio de dados consolidados das ações da instituição.
 - **OE4**: Fortalecer os vínculos institucionais, humanizando o relacionamento e o atendimento.
 
-# 2.3 Características de Produto
+## 2.3 Características de Produto
 
 Esta seção descreve as capacidades estruturais do sistema SGES focadas no valor de negócio e nas necessidades dos usuários, estabelecendo a rastreabilidade direta entre os Objetivos Específicos (OEs) da instituição e o catálogo de requisitos funcionais e não funcionais.
 
