@@ -8,6 +8,8 @@ export default defineConfig({
     globals: true,
     typecheck: { enabled: true },
     allowOnly: true,
+    include: ['test/unit/**/*.spec.ts', 'test/integration/**/*.test.ts'],
+    setupFiles: ['./test/setup.ts'],
     poolOptions: {
       threads: {
         singleThread: true,

@@ -7,6 +7,7 @@ const envSchema = z.object({
   POSTGRES_URL: z.string(),
   SLAVE_POSTGRES_URL: z.string().optional(),
   DATA_SOURCE_POOL_SIZE: z.coerce.number().default(20),
+  JWT_SECRET: z.string(),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);

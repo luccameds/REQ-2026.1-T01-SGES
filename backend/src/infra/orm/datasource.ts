@@ -1,15 +1,17 @@
-import { env } from "@/env";
-import { DataSource } from "typeorm";
+import { env } from '@/env'
+import { DataSource } from 'typeorm'
+import { UserEntity } from './entity/user-entity'
+import { CreateUsersTable1780757930000 } from './migrations/1780757930000-CreateUsersTable'
 
 type Config = {
-  [K in typeof env.NODE_ENV]: () => DataSource;
-};
+  [K in typeof env.NODE_ENV]: () => DataSource
+}
 
 const defaultConfig = {
   migrationsRun: true,
-  entities: [],
-  migrations: [],
-};
+  entities: [UserEntity],
+  migrations: [CreateUsersTable1780757930000],
+}
 
 const config: Config = {
   dev: () =>
@@ -45,6 +47,6 @@ const config: Config = {
         ],
       },
     }),
-};
+}
 
-export const dataSource = config[env.NODE_ENV]();
+export const dataSource = config[env.NODE_ENV]()
