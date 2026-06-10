@@ -24,6 +24,7 @@
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
       "strictPropertyInitialization": false,
+      "ignoreDeprecations": "6.0",
   },
   "include": ["src", "tests"],
   "exclude": ["node_modules"],
