@@ -137,6 +137,60 @@ let mockFormResponses = [
   },
 ];
 
+let mockHistoryClasses = [
+  {
+    id: 'hc1',
+    name: 'Alfabetização Inicial',
+    semester: '2025.2',
+    teacherName: 'Maria Silva',
+    enrolledCount: 45,
+    evadedCount: 4,
+    completedCount: 41,
+  },
+  {
+    id: 'hc2',
+    name: 'Corte e Costura Básico',
+    semester: '2025.2',
+    teacherName: 'Roberto Santos',
+    enrolledCount: 30,
+    evadedCount: 3,
+    completedCount: 27,
+  },
+  {
+    id: 'hc3',
+    name: 'Informática para Adultos',
+    semester: '2025.1',
+    teacherName: 'Lucas Lima',
+    enrolledCount: 48,
+    evadedCount: 6,
+    completedCount: 42,
+  },
+];
+
+let mockHistoryInstructors = [
+  {
+    id: 'hi1',
+    teacherName: 'Maria Silva',
+    className: 'Alfabetização Inicial',
+    semester: '2025.2',
+    hoursCount: 60,
+  },
+  {
+    id: 'hi2',
+    teacherName: 'Roberto Santos',
+    className: 'Corte e Costura Básico',
+    semester: '2025.2',
+    hoursCount: 45,
+  },
+  {
+    id: 'hi3',
+    teacherName: 'Lucas Lima',
+    className: 'Informática para Adultos',
+    semester: '2025.1',
+    hoursCount: 60,
+  },
+];
+
 // Track the last successful login for /auth/me validation
 let currentLoggedUser: MockUser | null = null;
 
@@ -565,6 +619,32 @@ export function setupMockApi(): void {
           data: newResponse,
           status: 201,
           statusText: 'Created',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
+      // --- GET /history/classes ---
+      if (url === '/history/classes' && method === 'get') {
+        await delay(100);
+        config.adapter = async () => ({
+          data: mockHistoryClasses,
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
+      // --- GET /history/instructors ---
+      if (url === '/history/instructors' && method === 'get') {
+        await delay(100);
+        config.adapter = async () => ({
+          data: mockHistoryInstructors,
+          status: 200,
+          statusText: 'OK',
           headers: {},
           config,
         });

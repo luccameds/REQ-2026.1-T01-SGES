@@ -21,6 +21,7 @@ import {
   Eye,
   Bell,
   FileText,
+  History,
 } from 'lucide-react';
 
 // --- Nav items per role ---
@@ -36,7 +37,7 @@ const adminNav: NavItem[] = [
   { label: 'Dashboard', icon: LayoutDashboard, to: '/dashboard', active: true },
   { label: 'Formulários', icon: FileText, to: '/forms', active: true },
   { label: 'Cadastros', icon: ClipboardList, to: '/students', active: true },
-  { label: 'Relatórios', icon: BarChart3, to: '#', active: false },
+  { label: 'Histórico', icon: History, to: '/history', active: true },
   { label: 'Turmas', icon: BookOpen, to: '#', active: false },
 ];
 
@@ -44,6 +45,7 @@ const volunteerNav: NavItem[] = [
   { label: 'Dashboard', icon: LayoutDashboard, to: '/dashboard', active: true },
   { label: 'Formulários', icon: FileText, to: '/forms', active: true },
   { label: 'Registro de Presença', icon: CalendarCheck, to: '/attendance', active: true },
+  { label: 'Histórico', icon: History, to: '/history', active: true },
 ];
 
 export const DashboardLayout: React.FC = () => {
