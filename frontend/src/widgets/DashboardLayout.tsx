@@ -37,14 +37,15 @@ const adminNav: NavItem[] = [
   { label: 'Dashboard', icon: LayoutDashboard, to: '/dashboard', active: true },
   { label: 'Formulários', icon: FileText, to: '/forms', active: true },
   { label: 'Cadastros', icon: ClipboardList, to: '/students', active: true },
+  { label: 'Turmas', icon: BookOpen, to: '/classes', active: true },
   { label: 'Histórico', icon: History, to: '/history', active: true },
-  { label: 'Turmas', icon: BookOpen, to: '#', active: false },
 ];
 
 const volunteerNav: NavItem[] = [
   { label: 'Dashboard', icon: LayoutDashboard, to: '/dashboard', active: true },
   { label: 'Formulários', icon: FileText, to: '/forms', active: true },
   { label: 'Registro de Presença', icon: CalendarCheck, to: '/attendance', active: true },
+  { label: 'Turmas', icon: BookOpen, to: '/classes', active: true },
   { label: 'Histórico', icon: History, to: '/history', active: true },
 ];
 

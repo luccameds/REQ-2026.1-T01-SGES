@@ -98,17 +98,44 @@ let mockStudents = [
 let mockClasses = [
   {
     id: 'c1',
-    name: 'Alfabetização - Turma A',
+    nomeCurso: 'Alfabetização - Turma A',
+    livrosEstudados: 'Apostila de Alfabetização Vol 1',
+    horario: '19:00 - 21:00',
+    diaSemana: 'Sábado',
+    vagasLimite: 50,
     semester: '2026.1',
-    schedule: 'Sábado à noite',
+    instructors: [
+      {
+        id: 'b2c3d4e5-f6a7-8901-bcde-f12345678901',
+        name: 'Maria Instrutora',
+        email: 'volunteer@sges.com',
+        role: 'volunteer',
+      }
+    ],
   },
   {
     id: 'c2',
-    name: 'Corte e Costura - Turma B',
+    nomeCurso: 'Corte e Costura - Turma B',
+    livrosEstudados: 'Manual do Costureiro Iniciante',
+    horario: '14:00 - 16:30',
+    diaSemana: 'Quarta-feira',
+    vagasLimite: 30,
     semester: '2026.1',
-    schedule: 'Quarta à tarde',
+    instructors: [
+      {
+        id: 'b2c3d4e5-f6a7-8901-bcde-f12345678901',
+        name: 'Maria Instrutora',
+        email: 'volunteer@sges.com',
+        role: 'volunteer',
+      }
+    ],
   },
 ];
+
+let mockEnrollments: Record<string, string[]> = {
+  'c1': ['s1', 's2'],
+  'c2': ['s2'],
+};
 
 let mockForms = [
   {
@@ -501,11 +528,97 @@ export function setupMockApi(): void {
         return config;
       }
 
+      // --- GET /users ---
+      if (url.startsWith('/users') && method === 'get') {
+        await delay(100);
+        config.adapter = async () => ({
+          data: {
+            users: MOCK_USERS.map((u) => ({
+              id: u.id,
+              name: u.name,
+              email: u.email,
+              role: u.role,
+            })),
+            total: MOCK_USERS.length,
+            totalPages: 1,
+            page: 1,
+          },
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
       // --- GET /classes ---
       if (url === '/classes' && method === 'get') {
         await delay(100);
+        const classesWithCount = mockClasses.map((c) => ({
+          ...c,
+          studentsCount: (mockEnrollments[c.id] || []).length,
+        }));
         config.adapter = async () => ({
-          data: mockClasses,
+          data: classesWithCount,
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
+      // --- POST /classes (Criar Turma) ---
+      if (url === '/classes' && method === 'post') {
+        await delay(200);
+        const body = typeof config.data === 'string' ? JSON.parse(config.data) : config.data;
+
+        const instructorIds = body.instructorIds || [];
+        if (instructorIds.length > 2) {
+          throw createMockError(400, 'Uma turma pode ter no máximo 2 instrutores.', config);
+        }
+
+        const newId = `c${mockClasses.length + 1}`;
+        const newClass = {
+          id: newId,
+          nomeCurso: body.nomeCurso,
+          livrosEstudados: body.livrosEstudados || '',
+          horario: body.horario,
+          diaSemana: body.diaSemana,
+          vagasLimite: body.vagasLimite ? Number(body.vagasLimite) : 50,
+          instructors: MOCK_USERS.filter(u => instructorIds.includes(u.id)).map(u => ({
+            id: u.id,
+            name: u.name,
+            email: u.email,
+            role: u.role
+          })),
+          semester: '2026.1',
+        };
+
+        mockClasses.push(newClass);
+        mockEnrollments[newId] = [];
+
+        config.adapter = async () => ({
+          data: newClass,
+          status: 201,
+          statusText: 'Created',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
+      // --- DELETE /classes/:classId (Excluir Turma) ---
+      if (url.startsWith('/classes/') && url.split('/').length === 3 && method === 'delete') {
+        await delay(150);
+        const parts = url.split('/');
+        const classId = parts[2];
+
+        mockClasses = mockClasses.filter((c) => c.id !== classId);
+        delete mockEnrollments[classId];
+
+        config.adapter = async () => ({
+          data: { success: true },
           status: 200,
           statusText: 'OK',
           headers: {},
@@ -517,8 +630,67 @@ export function setupMockApi(): void {
       // --- GET /classes/:classId/students ---
       if (url.startsWith('/classes/') && url.endsWith('/students') && method === 'get') {
         await delay(150);
+        const parts = url.split('/');
+        const classId = parts[2];
+        const studentIds = mockEnrollments[classId] || [];
+        const enrolledStudents = mockStudents.filter((s) => studentIds.includes(s.id));
         config.adapter = async () => ({
-          data: mockStudents,
+          data: enrolledStudents,
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
+      // --- POST /classes/:classId/students (Matricular Aluno) ---
+      if (url.startsWith('/classes/') && url.endsWith('/students') && method === 'post') {
+        await delay(150);
+        const parts = url.split('/');
+        const classId = parts[2];
+        const body = typeof config.data === 'string' ? JSON.parse(config.data) : config.data;
+        const studentId = body.studentId;
+
+        if (!mockEnrollments[classId]) {
+          mockEnrollments[classId] = [];
+        }
+
+        if (mockEnrollments[classId].includes(studentId)) {
+          throw createMockError(400, 'Aluno já está matriculado nesta turma.', config);
+        }
+
+        const currentClass = mockClasses.find(c => c.id === classId);
+        const limit = currentClass?.vagasLimite || 50;
+        if (mockEnrollments[classId].length >= limit) {
+          throw createMockError(400, `Esta turma atingiu o limite de ${limit} vagas.`, config);
+        }
+
+        mockEnrollments[classId].push(studentId);
+
+        config.adapter = async () => ({
+          data: { success: true },
+          status: 201,
+          statusText: 'Created',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
+      // --- DELETE /classes/:classId/students/:studentId (Desmatricular Aluno) ---
+      if (url.startsWith('/classes/') && url.includes('/students/') && method === 'delete') {
+        await delay(150);
+        const parts = url.split('/');
+        const classId = parts[2];
+        const studentId = parts[4];
+
+        if (mockEnrollments[classId]) {
+          mockEnrollments[classId] = mockEnrollments[classId].filter(id => id !== studentId);
+        }
+
+        config.adapter = async () => ({
+          data: { success: true },
           status: 200,
           statusText: 'OK',
           headers: {},

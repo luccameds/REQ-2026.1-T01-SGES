@@ -1,11 +1,23 @@
 import { apiClient } from './client';
 import type { StudentDto } from './students';
 
-export interface ClassDto {
+export interface UserDto {
   id: string;
   name: string;
+  email: string;
+  role: 'admin' | 'volunteer';
+}
+
+export interface ClassDto {
+  id: string;
+  nomeCurso: string;
+  livrosEstudados?: string | null;
+  horario: string;
+  diaSemana: string;
+  vagasLimite?: number | null;
   semester: string;
-  schedule: string;
+  instructors?: UserDto[];
+  studentsCount?: number;
 }
 
 export type AttendanceStatus = 'PRESENT' | 'ABSENT' | 'FT';
@@ -32,5 +44,36 @@ export const classesApi = {
       date,
       attendances,
     });
+  },
+
+  async create(input: {
+    nomeCurso: string;
+    livrosEstudados?: string | null;
+    horario: string;
+    diaSemana: string;
+    vagasLimite?: number | null;
+    instructorIds?: string[];
+  }): Promise<ClassDto> {
+    const { data } = await apiClient.post<ClassDto>('/classes', input);
+    return data;
+  },
+
+  async delete(classId: string): Promise<void> {
+    await apiClient.delete(`/classes/${classId}`);
+  },
+
+  async enrollStudent(classId: string, studentId: string): Promise<void> {
+    await apiClient.post(`/classes/${classId}/students`, { studentId });
+  },
+
+  async unenrollStudent(classId: string, studentId: string): Promise<void> {
+    await apiClient.delete(`/classes/${classId}/students/${studentId}`);
+  },
+};
+
+export const usersApi = {
+  async getAll(): Promise<{ users: UserDto[] }> {
+    const { data } = await apiClient.get<{ users: UserDto[] }>('/users');
+    return data;
   },
 };
