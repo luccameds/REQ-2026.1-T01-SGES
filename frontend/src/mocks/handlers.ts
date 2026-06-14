@@ -662,6 +662,50 @@ export function setupMockApi(): void {
         return config;
       }
 
+      // --- PUT /classes/:classId (Editar/Atualizar Turma) ---
+      if (url.startsWith('/classes/') && url.split('/').length === 3 && method === 'put') {
+        await delay(200);
+        const parts = url.split('/');
+        const classId = parts[2];
+        const body = typeof config.data === 'string' ? JSON.parse(config.data) : config.data;
+
+        const instructorIds = body.instructorIds || [];
+        if (instructorIds.length > 2) {
+          throw createMockError(400, 'Uma turma pode ter no máximo 2 instrutores.', config);
+        }
+
+        const classIndex = mockClasses.findIndex(c => c.id === classId);
+        if (classIndex === -1) {
+          throw createMockError(404, 'Turma não encontrada.', config);
+        }
+
+        const updatedClass = {
+          ...mockClasses[classIndex],
+          nomeCurso: body.nomeCurso,
+          livrosEstudados: body.livrosEstudados || '',
+          horario: body.horario,
+          diaSemana: body.diaSemana,
+          vagasLimite: body.vagasLimite ? Number(body.vagasLimite) : 50,
+          instructors: MOCK_USERS.filter(u => instructorIds.includes(u.id)).map(u => ({
+            id: u.id,
+            name: u.name,
+            email: u.email,
+            role: u.role
+          })),
+        };
+
+        mockClasses[classIndex] = updatedClass;
+
+        config.adapter = async () => ({
+          data: updatedClass,
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
       // --- DELETE /classes/:classId (Excluir Turma) ---
       if (url.startsWith('/classes/') && url.split('/').length === 3 && method === 'delete') {
         await delay(150);

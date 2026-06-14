@@ -58,6 +58,18 @@ export const classesApi = {
     return data;
   },
 
+  async update(classId: string, input: {
+    nomeCurso: string;
+    livrosEstudados?: string | null;
+    horario: string;
+    diaSemana: string;
+    vagasLimite?: number | null;
+    instructorIds?: string[];
+  }): Promise<ClassDto> {
+    const { data } = await apiClient.put<ClassDto>(`/classes/${classId}`, input);
+    return data;
+  },
+
   async delete(classId: string): Promise<void> {
     await apiClient.delete(`/classes/${classId}`);
   },

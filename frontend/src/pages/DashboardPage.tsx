@@ -129,7 +129,7 @@ export const DashboardPage: React.FC = () => {
                   </div>
                   <div className="h-7 w-full bg-muted rounded-xl overflow-hidden relative">
                     <div className="h-full bg-gradient-to-r from-primary/70 to-primary rounded-xl transition-all duration-500 w-full" />
-                    <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-white uppercase tracking-wider">
+                    <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-black dark:text-white uppercase tracking-wider">
                       Fase de Ingresso
                     </span>
                   </div>
@@ -145,7 +145,7 @@ export const DashboardPage: React.FC = () => {
                       className="h-full bg-gradient-to-r from-sky-400 to-sky-500 rounded-xl transition-all duration-500"
                       style={{ width: `${activePct}%` }}
                     />
-                    <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-foreground uppercase tracking-wider">
+                    <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-black dark:text-white uppercase tracking-wider">
                       Fase de Aprendizado
                     </span>
                   </div>
@@ -161,7 +161,7 @@ export const DashboardPage: React.FC = () => {
                       className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-xl transition-all duration-500"
                       style={{ width: `${completedPct}%` }}
                     />
-                    <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-white uppercase tracking-wider">
+                    <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-black dark:text-white uppercase tracking-wider">
                       Fase de Formatura
                     </span>
                   </div>

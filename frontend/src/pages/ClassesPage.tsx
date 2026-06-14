@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Search, X, BookOpen, Calendar, Clock, Users, Trash2, UserPlus, UserCheck, AlertTriangle } from 'lucide-react';
+import { Plus, Search, X, BookOpen, Calendar, Clock, Users, Trash2, UserPlus, UserCheck, AlertTriangle, Pencil } from 'lucide-react';
 import { classesApi, type ClassDto, type UserDto } from '@/shared/api/classes';
 import { studentsApi, type StudentDto } from '@/shared/api/students';
 import { useAuth } from '@/app/providers/AuthProvider';
@@ -25,19 +25,27 @@ export const ClassesPage: React.FC = () => {
   const [users, setUsers] = useState<UserDto[]>([]);
   const [search, setSearch] = useState('');
 
-  // Modais
+  // Modais e Estados de Edição
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [editingClassId, setEditingClassId] = useState<string | null>(null);
   const [isStudentsOpen, setIsStudentsOpen] = useState(false);
   const [selectedClass, setSelectedClass] = useState<ClassDto | null>(null);
   const [classStudents, setClassStudents] = useState<StudentDto[]>([]);
 
-  // Formulário Criar Turma
+  // Formulário Criar/Editar Turma
   const [nomeCurso, setNomeCurso] = useState('');
   const [livrosEstudados, setLivrosEstudados] = useState('');
   const [horario, setHorario] = useState('');
   const [diaSemana, setDiaSemana] = useState(DAYS_OF_WEEK[5]); // Sábado por padrão
   const [vagasLimite, setVagasLimite] = useState('50');
   const [selectedInstructors, setSelectedInstructors] = useState<string[]>([]);
+
+  // Cadastro Rápido de Instrutor
+  const [isQuickInstructorOpen, setIsQuickInstructorOpen] = useState(false);
+  const [quickInstructorName, setQuickInstructorName] = useState('');
+  const [quickInstructorEmail, setQuickInstructorEmail] = useState('');
+  const [quickInstructorRole, setQuickInstructorRole] = useState<'admin' | 'volunteer'>('volunteer');
+  const [quickError, setQuickError] = useState('');
 
   // Formulário Matrícula Aluno
   const [selectedStudentId, setSelectedStudentId] = useState('');
@@ -53,41 +61,20 @@ export const ClassesPage: React.FC = () => {
       const dataStudents = await studentsApi.getAll();
       setStudents(dataStudents);
 
-      if (isAdmin) {
-        // Obter usuários para o cadastro de professores
-        const { users: listUsers } = await classesApi.getAllUsers ? await classesApi.getAllUsers() : { users: [] };
-        setUsers(listUsers);
-      }
+      const { usersApi } = await import('@/shared/api/classes');
+      const res = await usersApi.getAll();
+      setUsers(res.users);
     } catch (err) {
       console.error('Erro ao carregar dados de turmas/alunos:', err);
     }
   };
 
   useEffect(() => {
-    // Fallback se usersApi não foi resolvida em classesApi.getAllUsers
-    const loadUsers = async () => {
-      try {
-        const { users: listUsers } = await classesApi.getAllUsers ? await classesApi.getAllUsers() : { users: [] };
-        if (listUsers.length > 0) {
-          setUsers(listUsers);
-        } else {
-          // buscar via usersApi se importado
-          const { usersApi } = await import('@/shared/api/classes');
-          const res = await usersApi.getAll();
-          setUsers(res.users);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
     loadAllData();
-    if (isAdmin) {
-      loadUsers();
-    }
-  }, [isAdmin]);
+  }, []);
 
   const handleOpenCreateModal = () => {
+    setEditingClassId(null);
     setNomeCurso('');
     setLivrosEstudados('');
     setHorario('');
@@ -95,10 +82,32 @@ export const ClassesPage: React.FC = () => {
     setVagasLimite('50');
     setSelectedInstructors([]);
     setError('');
+    setIsQuickInstructorOpen(false);
+    setQuickInstructorName('');
+    setQuickInstructorEmail('');
+    setQuickInstructorRole('volunteer');
+    setQuickError('');
     setIsCreateOpen(true);
   };
 
-  const handleCreateClass = async (e: React.FormEvent) => {
+  const handleOpenEditModal = (cls: ClassDto) => {
+    setEditingClassId(cls.id);
+    setNomeCurso(cls.nomeCurso);
+    setLivrosEstudados(cls.livrosEstudados || '');
+    setHorario(cls.horario);
+    setDiaSemana(cls.diaSemana);
+    setVagasLimite(String(cls.vagasLimite || 50));
+    setSelectedInstructors(cls.instructors?.map((i) => i.id) || []);
+    setError('');
+    setIsQuickInstructorOpen(false);
+    setQuickInstructorName('');
+    setQuickInstructorEmail('');
+    setQuickInstructorRole('volunteer');
+    setQuickError('');
+    setIsCreateOpen(true);
+  };
+
+  const handleSaveClass = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!nomeCurso || !horario || !diaSemana) {
       setError('Por favor, preencha todos os campos obrigatórios.');
@@ -113,20 +122,69 @@ export const ClassesPage: React.FC = () => {
     setLoading(true);
     setError('');
 
+    const payload = {
+      nomeCurso,
+      livrosEstudados: livrosEstudados || null,
+      horario,
+      diaSemana,
+      vagasLimite: vagasLimite ? Number(vagasLimite) : null,
+      instructorIds: selectedInstructors,
+    };
+
     try {
-      await classesApi.create({
-        nomeCurso,
-        livrosEstudados: livrosEstudados || null,
-        horario,
-        diaSemana,
-        vagasLimite: vagasLimite ? Number(vagasLimite) : null,
-        instructorIds: selectedInstructors,
-      });
-      addToast('success', 'Turma criada com sucesso!');
+      if (editingClassId) {
+        await classesApi.update(editingClassId, payload);
+        addToast('success', 'Turma atualizada com sucesso!');
+      } else {
+        await classesApi.create(payload);
+        addToast('success', 'Turma criada com sucesso!');
+      }
       setIsCreateOpen(false);
       await loadAllData();
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao criar a turma.');
+      setError(err.response?.data?.message || 'Erro ao salvar a turma.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleQuickCreateInstructor = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!quickInstructorName || !quickInstructorEmail) {
+      setQuickError('Preencha o nome e o e-mail do instrutor.');
+      return;
+    }
+
+    setLoading(true);
+    setQuickError('');
+
+    try {
+      const { usersApi } = await import('@/shared/api/classes');
+      const newUser = await usersApi.create({
+        name: quickInstructorName,
+        email: quickInstructorEmail,
+        role: quickInstructorRole,
+      });
+
+      // Adicionar à lista local de instrutores
+      setUsers((prev) => [...prev, newUser]);
+
+      // Selecionar o instrutor criado (respeitando limite de 2)
+      setSelectedInstructors((prev) => {
+        if (prev.includes(newUser.id)) return prev;
+        if (prev.length >= 2) {
+          addToast('warning', 'Instrutor cadastrado, mas limite de 2 instrutores na turma já atingido.');
+          return prev;
+        }
+        return [...prev, newUser.id];
+      });
+
+      addToast('success', 'Instrutor criado e selecionado com sucesso!');
+      setQuickInstructorName('');
+      setQuickInstructorEmail('');
+      setIsQuickInstructorOpen(false);
+    } catch (err: any) {
+      setQuickError(err.response?.data?.message || 'Erro ao cadastrar instrutor.');
     } finally {
       setLoading(false);
     }
@@ -276,13 +334,22 @@ export const ClassesPage: React.FC = () => {
                     <h3 className="font-bold text-foreground text-lg">{cls.nomeCurso}</h3>
                   </div>
                   {isAdmin && (
-                    <button
-                      onClick={() => handleDeleteClass(cls.id)}
-                      className="p-1.5 rounded-lg border border-border/60 hover:border-destructive/40 hover:bg-destructive/5 text-muted-foreground hover:text-destructive transition-all"
-                      title="Excluir turma"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    <div className="flex gap-1.5">
+                      <button
+                        onClick={() => handleOpenEditModal(cls)}
+                        className="p-1.5 rounded-lg border border-border/60 hover:border-primary/40 hover:bg-primary/5 text-muted-foreground hover:text-primary transition-all"
+                        title="Editar turma"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteClass(cls.id)}
+                        className="p-1.5 rounded-lg border border-border/60 hover:border-destructive/40 hover:bg-destructive/5 text-muted-foreground hover:text-destructive transition-all"
+                        title="Excluir turma"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   )}
                 </div>
 
@@ -359,12 +426,14 @@ export const ClassesPage: React.FC = () => {
         )}
       </div>
 
-      {/* Modal Criar Turma */}
+      {/* Modal Criar/Editar Turma */}
       {isCreateOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-foreground/30 backdrop-blur-sm">
           <div className="bg-card border border-border shadow-2xl rounded-2xl max-w-lg w-full overflow-hidden animate-in scale-in duration-200">
             <div className="flex items-center justify-between px-6 py-4 border-b border-border">
-              <h3 className="font-bold text-lg text-foreground">Cadastrar Nova Turma</h3>
+              <h3 className="font-bold text-lg text-foreground">
+                {editingClassId ? 'Editar Turma' : 'Cadastrar Nova Turma'}
+              </h3>
               <button
                 onClick={() => setIsCreateOpen(false)}
                 className="p-1 rounded-lg hover:bg-muted text-muted-foreground"
@@ -373,7 +442,7 @@ export const ClassesPage: React.FC = () => {
               </button>
             </div>
 
-            <form onSubmit={handleCreateClass} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+            <form onSubmit={handleSaveClass} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
               {error && (
                 <div className="p-3 bg-destructive/10 text-destructive rounded-xl text-xs font-medium flex items-center gap-2">
                   <AlertTriangle className="w-4 h-4 flex-shrink-0" />
@@ -458,9 +527,81 @@ export const ClassesPage: React.FC = () => {
               </div>
 
               <div className="space-y-2 pt-2">
-                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">
-                  Selecionar Instrutores (máximo de 2)
-                </label>
+                <div className="flex justify-between items-center">
+                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">
+                    Selecionar Instrutores (máximo de 2)
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsQuickInstructorOpen(!isQuickInstructorOpen);
+                      setQuickError('');
+                    }}
+                    className="text-xs text-primary font-bold hover:underline flex items-center gap-1"
+                  >
+                    {isQuickInstructorOpen ? 'Fechar Cadastro Rápido' : '+ Cadastrar Novo Instrutor'}
+                  </button>
+                </div>
+
+                {isQuickInstructorOpen && (
+                  <div className="border border-border rounded-xl p-4 bg-muted/20 space-y-3 animate-in fade-in duration-200">
+                    <h4 className="text-xs font-bold text-foreground">Cadastro Rápido de Instrutor</h4>
+                    {quickError && (
+                      <p className="text-[10px] text-destructive bg-destructive/10 p-2 rounded-lg font-medium">{quickError}</p>
+                    )}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <input
+                        type="text"
+                        placeholder="Nome Completo"
+                        value={quickInstructorName}
+                        onChange={(e) => setQuickInstructorName(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-border bg-background text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+                      />
+                      <input
+                        type="email"
+                        placeholder="E-mail"
+                        value={quickInstructorEmail}
+                        onChange={(e) => setQuickInstructorEmail(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-border bg-background text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+                      />
+                    </div>
+                    <div className="flex justify-between items-center pt-1">
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setQuickInstructorRole('volunteer')}
+                          className={`px-2.5 py-1 rounded-lg border text-[10px] font-bold ${
+                            quickInstructorRole === 'volunteer'
+                              ? 'bg-primary/10 border-primary text-primary'
+                              : 'bg-background border-border text-foreground'
+                          }`}
+                        >
+                          Voluntário
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setQuickInstructorRole('admin')}
+                          className={`px-2.5 py-1 rounded-lg border text-[10px] font-bold ${
+                            quickInstructorRole === 'admin'
+                              ? 'bg-purple-500/10 border-purple-500 text-purple-600'
+                              : 'bg-background border-border text-foreground'
+                          }`}
+                        >
+                          Admin
+                        </button>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleQuickCreateInstructor}
+                        disabled={loading}
+                        className="bg-primary text-white hover:bg-primary/90 text-xs font-bold px-3 py-1.5 rounded-lg disabled:opacity-50"
+                      >
+                        {loading ? 'Cadastrando...' : 'Cadastrar e Selecionar'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 border border-border rounded-xl p-3 bg-muted/20">
                   {users.map((u) => {
                     const selected = selectedInstructors.includes(u.id);
@@ -509,7 +650,7 @@ export const ClassesPage: React.FC = () => {
                   disabled={loading}
                   className="bg-primary text-white hover:bg-primary/90 transition-colors px-4 py-2 rounded-xl text-sm font-medium disabled:opacity-50"
                 >
-                  {loading ? 'Criando...' : 'Criar Turma'}
+                  {loading ? 'Salvando...' : (editingClassId ? 'Salvar Alterações' : 'Criar Turma')}
                 </button>
               </div>
             </form>

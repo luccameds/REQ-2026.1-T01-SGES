@@ -7,6 +7,7 @@ vi.mock('./client', () => {
     apiClient: {
       get: vi.fn(),
       post: vi.fn(),
+      put: vi.fn(),
       delete: vi.fn(),
     },
   };
@@ -60,6 +61,24 @@ describe('Classes API Client', () => {
     const result = await classesApi.create(input);
 
     expect(apiClient.post).toHaveBeenCalledWith('/classes', input);
+    expect(result).toEqual(mockClass);
+  });
+
+  it('should update an existing class', async () => {
+    const input = {
+      nomeCurso: 'Costura Avançada - Modificado',
+      livrosEstudados: 'Manual do Costureiro Pro',
+      horario: '14:00 - 16:00',
+      diaSemana: 'Sábado',
+      vagasLimite: 25,
+      instructorIds: ['u1'],
+    };
+    const mockClass = { id: 'c3', ...input, semester: '2026.1' };
+    vi.mocked(apiClient.put).mockResolvedValue({ data: mockClass });
+
+    const result = await classesApi.update('c3', input);
+
+    expect(apiClient.put).toHaveBeenCalledWith('/classes/c3', input);
     expect(result).toEqual(mockClass);
   });
 });
