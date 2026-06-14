@@ -2,12 +2,12 @@
 
 ## 2.1. Objetivo Geral do Produto
 
-Minimizar a descentralização e o espalhamento das informações dos participantes e das atividades da instituição, a fim de melhorar o controle de frequência, facilitar a identificação de evasão e assegurar a confiabilidade dos dados para apoio à tomada de decisão e ao fortalecimento do relacionamento com os beneficiários.
+Minimizar a descentralização e o espalhamento das informações dos participantes e das atividades da instituição, a fim de melhorar o controle de frequência, facilitar a identificação de evasão e assegurar a confiabilidade dos dados para apoio à tomada de decisão e ao fortalecimento do relacionamento com os beneficiários (alunos).
 
 ## 2.2. Objetivos Específicos do Produto
 
-- **OE1**: Centralizar e estruturar os dados cadastrais de alunos, voluntários (instrutores) e diretoria.
-- **OE2**: Monitorar a assiduidade e gerenciar a taxa de evasão dos alunos nos cursos e oficinas, permitindo intervenções rápidas.
+- **OE1**: Centralizar e estruturar os dados cadastrais de beneficiários (alunos), instrutores (voluntários) e diretoria.
+- **OE2**: Monitorar a assiduidade e gerenciar a taxa de evasão dos beneficiários (alunos) nos cursos e oficinas, permitindo intervenções rápidas.
 - **OE3**: Apoiar a tomada de decisão estratégica da diretoria por meio de dados consolidados das ações da instituição.
 - **OE4**: Fortalecer os vínculos institucionais, humanizando o relacionamento e o atendimento.
 
@@ -18,9 +18,9 @@ Esta seção descreve as capacidades estruturais do sistema SGES focadas no valo
 | OE Principal | Contribuição Secundária | ID  | Característica                      | Descrição Resumida                                                                                                                    | Valor de Negócio Principal                                                                                     |
 | :----------- | :---------------------- | :-- | :---------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ | :------------------------------------------------------------------------------------------------------------- |
 | **OE1**      | OE3                     | CP1 | **Segurança e Controle de Acessos** | Controlar os níveis de permissão de uso conforme o perfil do usuário e resguardar a privacidade das informações gravadas.             | Proteção de dados das famílias atendidas e governança sobre quem visualiza ou altera as informações.           |
-| **OE1**      | OE2                     | CP2 | **Gestão de Instrutores**           | Cadastrar, atualizar e acompanhar as informações da equipe de instrução e dos voluntários.                                            | Organização da oferta de oficinas e controle das atribuições da equipe técnica.                                |
-| **OE1**      | OE4                     | CP3 | **Cadastro Sociodemográfico**       | Centralizar, atualizar e consultar as informações sociais, habitacionais e demográficas dos beneficiários.                            | Centralização, confiabilidade do histórico dos beneficiários e embasamento para um atendimento humanizado.     |
-| **OE2**      | OE4                     | CP4 | **Frequência e Engajamento**        | Registrar de forma ágil a assiduidade diária e gerenciar a abertura de turmas, matrículas e limites de vagas.                         | Acompanhamento contínuo da participação dos alunos e otimização do aproveitamento das vagas abertas.           |
+| **OE1**      | OE2                     | CP2 | **Gestão de Instrutores**           | Cadastrar, atualizar e acompanhar as informações da equipe de instrução e dos voluntários (instrutores).                               | Organização da oferta de oficinas e controle das atribuições da equipe técnica.                                |
+| **OE1**      | OE4                     | CP3 | **Cadastro Sociodemográfico**       | Centralizar, atualizar e consultar as informações sociais, habitacionais e demográficas dos beneficiários (alunos).                            | Centralização, confiabilidade do histórico dos beneficiários (alunos) e embasamento para um atendimento humanizado.     |
+| **OE2**      | OE4                     | CP4 | **Frequência e Engajamento**        | Registrar de forma ágil a assiduidade diária e gerenciar a abertura de turmas, matrículas e limites de vagas.                         | Acompanhamento contínuo da participação dos beneficiários (alunos) e otimização do aproveitamento das vagas abertas.    |
 | **OE2**      | OE4                     | CP5 | **Monitoramento de Evasão**         | Identificar de forma automática padrões de ausência crônica e documentar os atendimentos de apoio realizados com as famílias.         | Atuação preventiva para redução da evasão social e fortalecimento do vínculo protetivo com a comunidade.       |
 | **OE3**      | OE1, OE2                | CP6 | **Relatórios e Transparência**      | Consolidar dados estatísticos agregados e permitir a extração de informativos de impacto gerencial, preservando as identidades.       | Subsídios para tomadas de decisão da diretoria e facilitação da prestação de contas para parceiros e doadores. |
 | **OE3**      | OE1                     | CP7 | **Arquitetura e Performance**       | Prover uma interface simples e de fácil compreensão, assegurando que o sistema permaneça disponível e de fácil manutenção continuada. | Baixa curva de aprendizado para a equipe e garantia de sustentabilidade da ferramenta a longo prazo.           |
@@ -67,19 +67,19 @@ Plataforma para coleta de dados com ferramentas integradas de monitoramento e vi
 
 - **Pontos fortes:** Bom para pesquisas.
 
-- **Limitações:** Alto custo para uso contínuo, não é sistema de gestão de beneficiários.
+- **Limitações:** Alto custo para uso contínuo, não é sistema de gestão de beneficiários (alunos).
 
 ---
 
 ## SGES como solução
 
-Além de ser financeiramente mais viável em comparação às plataformas citadas, o **SGES** irá centralizar dados que hoje ficam dispersos em cadernos e planilhas individuais, o que dificulta o acompanhamento de frequência dos alunos, evasão e histórico de participantes e voluntários.
+Além de ser financeiramente mais viável em comparação às plataformas citadas, o **SGES** irá centralizar dados que hoje ficam dispersos em cadernos e planilhas individuais, o que dificulta o acompanhamento de frequência dos beneficiários (alunos), evasão e histórico de participantes e instrutores.
 
 Os exemplos citados não satisfazem totalmente os interesses do cliente, sendo favoráveis apenas em alguns pontos.
 
 ### Benefícios práticos do SGES
 
-- Organização dos dados de alunos e voluntários (nome, data de matrícula, frequência).
+- Organização dos dados de beneficiários (alunos) e instrutores (nome, data de matrícula, frequência).
 
 - Geração de relatórios simples com esses dados.
 
@@ -113,7 +113,7 @@ A viabilidade técnica do projeto é **média**.
 
 ## 2.7. Benefícios Esperados
 
-- **Para alunos e participantes:**  
+- **Para beneficiários (alunos) e participantes:**  
   Acompanhamento de registros de frequência, histórico de participação e atendimento.
 
 - **Para instrutores:**  
@@ -124,7 +124,7 @@ A viabilidade técnica do projeto é **média**.
 
 ## 2.8. Intervenção Social
 
-O **SGES** não é apenas uma ferramenta de organização de dados. Ao ser introduzido no contexto da **Sociedade Espírita Auta de Souza (SEAS)**, ele se configura como uma intervenção social: uma mudança que tende a reorganizar práticas, relações, fluxos de informação e critérios de decisão dentro da instituição e em sua relação com os beneficiários.
+O **SGES** não é apenas uma ferramenta de organização de dados. Ao ser introduzido no contexto da **Sociedade Espírita Auta de Souza (SEAS)**, ele se configura como uma intervenção social: uma mudança que tende a reorganizar práticas, relações, fluxos de informação e critérios de decisão dentro da instituição e em sua relação com os beneficiários (alunos).
 
 Os impactos pretendidos são as transformações deliberadamente buscadas pela solução, diretamente alinhadas aos **Objetivos Específicos** definidos na seção 2.2:
 
@@ -132,11 +132,11 @@ Os impactos pretendidos são as transformações deliberadamente buscadas pela s
 
 - **Centralização e confiabilidade da informação (OE1):**
 
-  O SGES pretende substituir o fluxo descentralizado por um repositório único e consistente. Essa mudança reconfigura a forma como a instituição conhece seus próprios beneficiários e toma decisões baseadas nesse conhecimento.
+  O SGES pretende substituir o fluxo descentralizado por um repositório único e consistente. Essa mudança reconfigura a forma como a instituição conhece seus próprios beneficiários (alunos) e toma decisões baseadas nesse conhecimento.
 
 - **Visibilidade da evasão e intervenção oportuna (OE2):**
 
-  O SGES pretende tornar mais perceptível o acompanhamento dos alunos, principalmente aqueles que se afastam silenciosamente sem que a instituição perceba a tempo de agir. A aplicação transforma dados de frequência em alertas acionáveis, mudando o papel dos gestores de reativos para proativos.
+  O SGES pretende tornar mais perceptível o acompanhamento dos beneficiários (alunos), principalmente aqueles que se afastam silenciosamente sem que a instituição perceba a tempo de agir. A aplicação transforma dados de frequência em alertas acionáveis, mudando o papel dos gestores de reativos para proativos.
 
 - **Apoio à decisão estratégica com dados (OE3):**
 
@@ -154,16 +154,16 @@ Nem todos os impactos de uma intervenção social são pretendidos. Tendo isso e
 
 - **Dependência de voluntários para operar o sistema:**
 
-  A SEAS depende fortemente de trabalho voluntário, com alta rotatividade. Se o sistema exigir curva de aprendizagem longa ou processos burocráticos, há risco de abandono ou subutilização. Esse risco é abordado pelo **RNF01 (Facilidade de Aprendizado)** e justifica a priorização de usabilidade.
+  A SEAS depende fortemente de trabalho voluntário, com alta rotatividade. Se o sistema exigir curva de aprendizagem longa ou processos burocráticos, há risco de abandono ou subutilização. Esse risco é abordado pelo **RNF05 (Curva de Aprendizado)** e justifica a priorização de usabilidade.
 
 - **Mudança no papel dos instrutores:**
 
   Atualmente os instrutores registram presença em papel, de forma autônoma e sem padronização. Com o SGES, passam a operar um sistema digital com campos definidos, regras de acesso e fluxos padronizados. Essa mudança pode gerar resistência, especialmente entre voluntários mais antigos. É necessário considerar capacitação progressiva e adoção gradual.
 
-- **Risco de exclusão digital dos beneficiários:**
+- **Risco de exclusão digital dos beneficiários (alunos):**
 
-  Embora o sistema seja voltado para uso interno da equipe, funcionalidades futuras (como consulta de frequência pelos próprios alunos) podem esbarrar na vulnerabilidade digital de parte do público atendido.
+  Embora o sistema seja voltado para uso interno da equipe, funcionalidades futuras (como consulta de frequência pelos próprios beneficiários (alunos)) podem esbarrar na vulnerabilidade digital de parte do público atendido.
 
 - **Concentração de informação sensível:**
 
-  Ao centralizar dados de famílias em situação de vulnerabilidade, o SGES concentra informações sensíveis que, se mal gerenciadas, podem comprometer privacidade e segurança. Esse risco é reconhecido no **RNF02 (Segurança de Dados / LGPD)** e deve ser tratado como requisito de produto, não como detalhe de implementação.
+  Ao centralizar dados de famílias em situação de vulnerabilidade, o SGES concentra informações sensíveis que, se mal gerenciadas, podem comprometer privacidade e segurança. Esse risco é reconhecido nos **RNF01 (Criptografia Sensível)** e **RNF02 (Trilha de Auditoria)** e deve ser tratado como requisito de produto, não como detalhe de implementação.
