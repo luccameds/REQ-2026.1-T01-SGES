@@ -76,4 +76,13 @@ export const usersApi = {
     const { data } = await apiClient.get<{ users: UserDto[] }>('/users');
     return data;
   },
+
+  async create(input: { name: string; email: string; role: 'admin' | 'volunteer' }): Promise<UserDto> {
+    const { data } = await apiClient.post<UserDto>('/users', input);
+    return data;
+  },
+
+  async delete(id: string): Promise<void> {
+    await apiClient.delete(`/users/${id}`);
+  },
 };

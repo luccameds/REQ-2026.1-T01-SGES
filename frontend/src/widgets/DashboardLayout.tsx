@@ -22,6 +22,7 @@ import {
   Bell,
   FileText,
   History,
+  Shield,
 } from 'lucide-react';
 
 // --- Nav items per role ---
@@ -38,6 +39,7 @@ const adminNav: NavItem[] = [
   { label: 'Formulários', icon: FileText, to: '/forms', active: true },
   { label: 'Cadastros', icon: ClipboardList, to: '/students', active: true },
   { label: 'Turmas', icon: BookOpen, to: '/classes', active: true },
+  { label: 'Instrutores', icon: Shield, to: '/instructors', active: true },
   { label: 'Histórico', icon: History, to: '/history', active: true },
 ];
 

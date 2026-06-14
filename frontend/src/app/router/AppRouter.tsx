@@ -10,6 +10,7 @@ import { AttendancePage } from '@/pages/AttendancePage';
 import { FormsPage } from '@/pages/FormsPage';
 import { HistoryPage } from '@/pages/HistoryPage';
 import { ClassesPage } from '@/pages/ClassesPage';
+import { InstructorsPage } from '@/pages/InstructorsPage';
 import { DashboardLayout } from '@/widgets/DashboardLayout';
 
 export const AppRouter: React.FC = () => {
@@ -30,6 +31,7 @@ export const AppRouter: React.FC = () => {
             <Route path="/forms" element={<FormsPage />} />
             <Route path="/history" element={<HistoryPage />} />
             <Route path="/classes" element={<ClassesPage />} />
+            <Route path="/instructors" element={<InstructorsPage />} />
           </Route>
         </Route>
 

@@ -529,7 +529,7 @@ export function setupMockApi(): void {
       }
 
       // --- GET /users ---
-      if (url.startsWith('/users') && method === 'get') {
+      if (url.startsWith('/users') && method === 'get' && !url.includes('/users/')) {
         await delay(100);
         config.adapter = async () => ({
           data: {
@@ -543,6 +543,60 @@ export function setupMockApi(): void {
             totalPages: 1,
             page: 1,
           },
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
+      // --- POST /users (Criar Usuário/Instrutor) ---
+      if (url === '/users' && method === 'post') {
+        await delay(200);
+        const body = typeof config.data === 'string' ? JSON.parse(config.data) : config.data;
+
+        if (MOCK_USERS.some(u => u.email.toLowerCase() === body.email.toLowerCase())) {
+          throw createMockError(400, 'Já existe um usuário cadastrado com este e-mail.', config);
+        }
+
+        const newUser = {
+          id: `u${MOCK_USERS.length + 1}`,
+          name: body.name,
+          email: body.email,
+          role: body.role || 'volunteer',
+          password: 'Senha123!',
+        };
+
+        MOCK_USERS.push(newUser);
+
+        config.adapter = async () => ({
+          data: newUser,
+          status: 201,
+          statusText: 'Created',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
+      // --- DELETE /users/:id (Excluir Usuário/Instrutor) ---
+      if (url.startsWith('/users/') && method === 'delete') {
+        await delay(150);
+        const parts = url.split('/');
+        const userId = parts[2];
+
+        if (userId === 'a1b2c3d4-e5f6-7890-abcd-ef1234567890') {
+          throw createMockError(400, 'Não é possível excluir o administrador principal.', config);
+        }
+
+        const index = MOCK_USERS.findIndex((u) => u.id === userId);
+        if (index !== -1) {
+          MOCK_USERS.splice(index, 1);
+        }
+
+        config.adapter = async () => ({
+          data: { success: true },
           status: 200,
           statusText: 'OK',
           headers: {},
