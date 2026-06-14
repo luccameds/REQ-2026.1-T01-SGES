@@ -6,6 +6,7 @@ import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage';
 import { ResetPasswordPage } from '@/pages/ResetPasswordPage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { StudentsPage } from '@/pages/StudentsPage';
+import { AttendancePage } from '@/pages/AttendancePage';
 import { DashboardLayout } from '@/widgets/DashboardLayout';
 
 export const AppRouter: React.FC = () => {
@@ -22,6 +23,7 @@ export const AppRouter: React.FC = () => {
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/students" element={<StudentsPage />} />
+            <Route path="/attendance" element={<AttendancePage />} />
           </Route>
         </Route>
 

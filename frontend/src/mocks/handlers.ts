@@ -95,6 +95,21 @@ let mockStudents = [
   },
 ];
 
+let mockClasses = [
+  {
+    id: 'c1',
+    name: 'Alfabetização - Turma A',
+    semester: '2026.1',
+    schedule: 'Sábado à noite',
+  },
+  {
+    id: 'c2',
+    name: 'Corte e Costura - Turma B',
+    semester: '2026.1',
+    schedule: 'Quarta à tarde',
+  },
+];
+
 // Track the last successful login for /auth/me validation
 let currentLoggedUser: MockUser | null = null;
 
@@ -368,6 +383,48 @@ export function setupMockApi(): void {
           data: mockStudents[studentIndex],
           status: 200,
           statusText: 'OK',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
+      // --- GET /classes ---
+      if (url === '/classes' && method === 'get') {
+        await delay(100);
+        config.adapter = async () => ({
+          data: mockClasses,
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
+      // --- GET /classes/:classId/students ---
+      if (url.startsWith('/classes/') && url.endsWith('/students') && method === 'get') {
+        await delay(150);
+        config.adapter = async () => ({
+          data: mockStudents,
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
+      // --- POST /classes/:classId/attendances ---
+      if (url.startsWith('/classes/') && url.endsWith('/attendances') && method === 'post') {
+        await delay(200);
+        const body = typeof config.data === 'string' ? JSON.parse(config.data) : config.data;
+        console.log('[SGES Mock API] Presenças salvas:', body);
+
+        config.adapter = async () => ({
+          data: { success: true, count: body.length },
+          status: 201,
+          statusText: 'Created',
           headers: {},
           config,
         });

@@ -42,7 +42,7 @@ const adminNav: NavItem[] = [
 const volunteerNav: NavItem[] = [
   { label: 'Dashboard', icon: LayoutDashboard, to: '/dashboard', active: true },
   { label: 'Minhas Turmas', icon: BookOpen, to: '#', active: false },
-  { label: 'Registro de Presença', icon: CalendarCheck, to: '#', active: false },
+  { label: 'Registro de Presença', icon: CalendarCheck, to: '/attendance', active: true },
 ];
 
 export const DashboardLayout: React.FC = () => {
