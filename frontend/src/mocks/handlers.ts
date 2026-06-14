@@ -74,6 +74,27 @@ let mockNotifications = [
   },
 ];
 
+let mockStudents = [
+  {
+    id: 's1',
+    codigo_matricula: 'MAT-000001',
+    name: 'João Silva',
+    email: 'joao.silva@email.com',
+    profissao: 'Carpinteiro',
+    foto_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 's2',
+    codigo_matricula: 'MAT-000002',
+    name: 'Maria Santos',
+    email: 'maria.santos@email.com',
+    profissao: 'Professora',
+    foto_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
+    createdAt: new Date().toISOString(),
+  },
+];
+
 // Track the last successful login for /auth/me validation
 let currentLoggedUser: MockUser | null = null;
 
@@ -283,6 +304,73 @@ export function setupMockApi(): void {
           config,
         });
 
+        return config;
+      }
+
+      // --- GET /students ---
+      if (url === '/students' && method === 'get') {
+        await delay(100);
+        config.adapter = async () => ({
+          data: mockStudents,
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
+      // --- POST /students ---
+      if (url === '/students' && method === 'post') {
+        await delay(200);
+        const body = typeof config.data === 'string' ? JSON.parse(config.data) : config.data;
+        const newStudent = {
+          id: `s${mockStudents.length + 1}`,
+          codigo_matricula: `MAT-${String(mockStudents.length + 1).padStart(6, '0')}`,
+          name: body.name,
+          email: body.email,
+          profissao: body.profissao,
+          foto_url: body.foto_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+          createdAt: new Date().toISOString(),
+        };
+        mockStudents.unshift(newStudent);
+
+        config.adapter = async () => ({
+          data: newStudent,
+          status: 201,
+          statusText: 'Created',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
+      // --- PUT /students/:id ---
+      if (url.startsWith('/students/') && method === 'put') {
+        await delay(200);
+        const parts = url.split('/');
+        const id = parts[2];
+        const body = typeof config.data === 'string' ? JSON.parse(config.data) : config.data;
+        const studentIndex = mockStudents.findIndex((s) => s.id === id);
+        if (studentIndex === -1) {
+          throw createMockError(404, 'Estudante não encontrado.', config);
+        }
+
+        mockStudents[studentIndex] = {
+          ...mockStudents[studentIndex],
+          name: body.name,
+          email: body.email,
+          profissao: body.profissao,
+          foto_url: body.foto_url || mockStudents[studentIndex].foto_url,
+        };
+
+        config.adapter = async () => ({
+          data: mockStudents[studentIndex],
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config,
+        });
         return config;
       }
 

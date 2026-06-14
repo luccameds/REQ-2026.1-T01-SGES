@@ -34,7 +34,7 @@ interface NavItem {
 const adminNav: NavItem[] = [
   { label: 'Dashboard', icon: LayoutDashboard, to: '/dashboard', active: true },
   { label: 'Instrutores', icon: Users, to: '#', active: false },
-  { label: 'Cadastros', icon: ClipboardList, to: '#', active: false },
+  { label: 'Cadastros', icon: ClipboardList, to: '/students', active: true },
   { label: 'Relatórios', icon: BarChart3, to: '#', active: false },
   { label: 'Turmas', icon: BookOpen, to: '#', active: false },
 ];
