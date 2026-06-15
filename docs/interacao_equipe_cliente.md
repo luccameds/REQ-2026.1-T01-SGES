@@ -1,6 +1,6 @@
-# 7. Interação Equipe e Cliente
+# 8. Interação Equipe e Cliente
 
-## 7.1. Composição da Equipe
+## 8.1. Composição da Equipe
 
 | Papel                  | Descrição                                                                                                                         | Responsável     | Participantes           |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------- | ----------------------- |
@@ -11,7 +11,7 @@
 | Prototipação           | Definições das interfaces que servem como base para o desenvolvimento e identificação dos problemas dos clientes de forma visual. | Matheus Eiki    | Guilherme               |
 | Analista de Requisitos | Define os requisitos funcionais e não funcionais do sistema e garante que eles sejam atendidos                                    | Guilherme       | Gabriel P               |
 
-## 7.2. Comunicação e Reuniões
+## 8.2. Comunicação e Reuniões
 
 ### Ferramentas de Comunicação
 
@@ -25,23 +25,31 @@
 
 - **TLDraw:** Será utilizado como quadro colaborativo para diagramações e planejamento visual de funcionalidades. A ferramenta possibilitará a criação de fluxos, protótipos de interface, mapas de arquitetura e demais documentações visuais necessárias durante as etapas de planejamento e refinamento do projeto, facilitando o alinhamento visual entre os membros da equipe.
 
-### Métodos e Frequência de Reuniões
+### Métodos e Frequência de Reuniões (Abordagem OpenUP)
 
-- **Reuniões Diárias (Daily Scrum):** A equipe de desenvolvimento realizará reuniões diárias de curta duração para discutir o progresso de cada membro, os obstáculos encontrados e as prioridades do dia. Conduzidas de forma objetiva via Discord, essas reuniões garantirão que todos estejam cientes do andamento do projeto e que eventuais impedimentos sejam identificados e resolvidos com agilidade.
+#### Reuniões Diárias de Status
+A equipe de desenvolvimento realizará comunicação assíncrona semanalmente para alinhar o andamento dos micro-incrementos técnicos e sincronizar o progresso individual. Conduzidas de forma objetiva via WhatsApp, essas mensagens servem para atualizar a Lista de Itens de Trabalho (Work Item List), identificar impedimentos com agilidade e, se necessário, ajustar o horário para acomodar a rotina de todos os membros (como pendências de horários).
 
-- **Reunião de Revisão de Sprint (Review):** Ao final de cada sprint, a equipe realizará uma reunião de revisão com o cliente. Nesse momento, as funcionalidades desenvolvidas serão apresentadas e demonstradas, permitindo que o cliente as valide, teste e forneça feedback direto. As informações coletadas nessa reunião serão utilizadas para ajustar o backlog e orientar as prioridades do próximo ciclo de desenvolvimento.
+#### Avaliação de Fim de Iteração
+Ao final de cada iteração, a equipe realizará uma reunião formal de avaliação de resultados. Nesse momento, as funcionalidades desenvolvidas no ciclo são analisadas para verificar se cumprem os critérios de aceite estabelecidos. O resultado dessa avaliação mede o progresso real em relação aos objetivos de alto nível da fase e ajuda a calibrar o escopo para a iteração seguinte.
 
-- **Reunião de Planejamento de Sprint:** Após a reunião de revisão, a equipe e o cliente se reunirão para planejar o próximo sprint. Nessa etapa, o backlog será revisado em conjunto e as funcionalidades serão priorizadas de acordo com o feedback recebido, assegurando que o desenvolvimento permaneça alinhado às expectativas e necessidades do cliente.
+#### Planejamento de Iteração
+No início de cada novo ciclo, a equipe se reúne para estruturar o próximo Plano de Iteração. Nessa etapa, o escopo macro definido no Plano de Projeto é revisado e as Histórias de Usuários prioritárias da Lista de Itens de Trabalho são subdivididos em tarefas de desenvolvimento menores e distribuídos entre os membros da equipe de acordo com suas capacidades e estimativas de esforço.
 
-- **Reunião de Retrospectiva:** Também ao final de cada sprint, a equipe realizará uma reunião interna de retrospectiva. O objetivo é refletir sobre o ciclo encerrado, identificando o que funcionou bem, os pontos de melhoria e as lições aprendidas. Essa prática garante a melhoria contínua dos processos, da comunicação e da qualidade das entregas ao longo de todo o projeto.
+#### Retrospectiva e Lições Aprendidas
+Também integrada ao encerramento da iteração, a equipe realiza uma sessão de retrospectiva com o objetivo de refletir sobre o processo de Engenharia de Software adotado. São identificados os pontos fortes, os gargalos técnicos e organizacionais e os desvios de planejamento. Os aprendizados são registrados diretamente como Lições Aprendidas no Plano de Projeto para garantir a evolução contínua da qualidade e dos processos da equipe.
+
+---
 
 ### Frequência de Interações com o Cliente
 
-- **Revisões de Sprint:** Pelo menos um representante da organização estará diretamente envolvido nas revisões de sprint, realizadas ao término de cada ciclo de desenvolvimento, onde cada um desses ciclos possui a duração de 10 dias úteis. Nessas reuniões, poderá validar as entregas, testar as funcionalidades implementadas e fornecer feedback para orientar os próximos passos do projeto.
+#### Demonstração de Resultados e Checkpoints
+Pelo menos um representante da organização cliente (Stakeholder) estará diretamente envolvido nos checkpoints de encerramento de cada iteração, realizados ao término de cada ciclo de desenvolvimento. Nessas sessões, o cliente poderá validar os micro-incrementos entregues, testar as capacidades funcionais das Histórias de Usuário implementadas e fornecer o feedback necessário para orientar a priorização das próximas iterações.
 
-- **Planejamento da Sprint:** Após o planejamento de cada sprint, será enviado via email para o cliente, um informativo indicando um conjunto de funcionalidades que serão desenvolvidas ao longo da sprint seguinte, com o intuito de validar e alinhar expectativas.
+#### Alinhamento de Escopo e Informativos
+Após a consolidação do planejamento de cada ciclo, a gerência de projeto enviará via WhatsApp para o cliente um informativo detalhado contendo o conjunto de Histórias de Usuário e capacidades técnicas que serão abordados ao longo da iteração seguinte. Essa prática garante a transparência contínua e o alinhamento estrito de expectativas entre a equipe de desenvolvimento e as necessidades do negócio do cliente.
 
-## 7.3. Processo de Validação
+## 8.3. Processo de Validação
 
 O processo de validação da solução será realizado em três etapas principais:
 
@@ -49,30 +57,4 @@ Para iniciar o desenvolvimento de uma funcionalidade, será utilizado o **Defini
 
 Durante o desenvolvimento, será aplicado o **Definition of Done (DoD)**, no qual a funcionalidade será considerada pronta apenas após passar por validações técnicas e funcionais, incluindo testes básicos, verificação de funcionamento e avaliação de usabilidade, garantindo que a solução seja adequada ao contexto dos usuários.
 
-Após a validação interna, o incremento será apresentado aos stakeholders ao final de cada sprint, para **validação por meio de feedback contínuo**. Nessa etapa, os usuários irão verificar se as funcionalidades atendem às suas necessidades, permitindo ajustes e refinamentos antes das próximas iterações.## 7.4. Lições Aprendidas
-
-Ao longo do desenvolvimento do projeto, a equipe identificou aprendizados importantes sobre processo, relacionamento com o cliente e organização da comunicação. Esses pontos ajudaram a ajustar a condução do trabalho e a reduzir riscos para as próximas entregas.
-
-## 1. Compreensão do processo de desenvolvimento
-
-**Desafio:** No início, houve dificuldade para definir a melhor abordagem de trabalho, especialmente porque não existe uma única solução ideal em Engenharia de Software.
-
-**Ação de melhoria:** A equipe passou a adotar uma postura mais flexível e adaptativa, aprofundando o estudo sobre processos, metodologias e impacto dos requisitos antes de tomar decisões.
-
-## 2. Definição e dependência do cliente
-
-**Desafio:** A definição tardia do cliente aumentou os riscos do projeto, dificultando o início da comunicação e podendo comprometer a continuidade caso houvesse necessidade de substituição.
-
-**Ação de melhoria:** A equipe passou a considerar múltiplos possíveis clientes e a manter alternativas viáveis, aumentando a segurança e a estabilidade do processo.
-
-## 3. Comunicação e disponibilidade do cliente
-
-**Desafio:** Houve demora nas respostas e dificuldade para alinhar horários de reunião. Em alguns momentos, as reuniões também ficaram pouco objetivas, com repetição de pontos já definidos.
-
-**Ação de melhoria:** A equipe passou a buscar encontros mais diretos e objetivos, além de propor canais de comunicação mais ágeis para acelerar o retorno e facilitar o alinhamento.
-
-## 4. Organização da troca de informações
-
-**Desafio:** A comunicação inicial com o cliente foi pouco eficiente, o que dificultou a circulação de informações e atrasou algumas definições.
-
-**Ação de melhoria:** Foi sugerida a criação de um canal de comunicação direto entre equipe e cliente, com o objetivo de agilizar o contato, facilitar esclarecimentos e apoiar o processo de validação.
+Após a validação interna, o incremento será apresentado aos stakeholders ao final de cada sprint, para **validação por meio de feedback contínuo**. Nessa etapa, os usuários irão verificar se as funcionalidades atendem às suas necessidades, permitindo ajustes e refinamentos antes das próximas iterações.
