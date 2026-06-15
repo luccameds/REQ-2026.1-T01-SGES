@@ -16,7 +16,7 @@ describe('Instructors/Users API Client', () => {
   it('should fetch all users/instructors', async () => {
     const mockUsers = {
       users: [
-        { id: 'u1', name: 'Carlos Gestor', email: 'admin@sges.com', role: 'admin' },
+        { id: 'u1', name: 'Nayla Nobre', email: 'admin@sges.com', role: 'admin' },
         { id: 'u2', name: 'Maria Instrutora', email: 'volunteer@sges.com', role: 'volunteer' },
       ],
     };

@@ -36,7 +36,7 @@ export const ClassesPage: React.FC = () => {
   const [nomeCurso, setNomeCurso] = useState('');
   const [livrosEstudados, setLivrosEstudados] = useState('');
   const [horario, setHorario] = useState('');
-  const [diaSemana, setDiaSemana] = useState(DAYS_OF_WEEK[5]); // Sábado por padrão
+  const [selectedDays, setSelectedDays] = useState<string[]>([DAYS_OF_WEEK[5]]); // Sábado por padrão
   const [vagasLimite, setVagasLimite] = useState('50');
   const [selectedInstructors, setSelectedInstructors] = useState<string[]>([]);
 
@@ -78,7 +78,7 @@ export const ClassesPage: React.FC = () => {
     setNomeCurso('');
     setLivrosEstudados('');
     setHorario('');
-    setDiaSemana(DAYS_OF_WEEK[5]);
+    setSelectedDays([DAYS_OF_WEEK[5]]);
     setVagasLimite('50');
     setSelectedInstructors([]);
     setError('');
@@ -95,7 +95,7 @@ export const ClassesPage: React.FC = () => {
     setNomeCurso(cls.nomeCurso);
     setLivrosEstudados(cls.livrosEstudados || '');
     setHorario(cls.horario);
-    setDiaSemana(cls.diaSemana);
+    setSelectedDays(cls.diaSemana ? cls.diaSemana.split(', ') : []);
     setVagasLimite(String(cls.vagasLimite || 50));
     setSelectedInstructors(cls.instructors?.map((i) => i.id) || []);
     setError('');
@@ -109,8 +109,8 @@ export const ClassesPage: React.FC = () => {
 
   const handleSaveClass = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!nomeCurso || !horario || !diaSemana) {
-      setError('Por favor, preencha todos os campos obrigatórios.');
+    if (!nomeCurso || !horario || selectedDays.length === 0) {
+      setError('Por favor, preencha todos os campos obrigatórios e selecione pelo menos um dia da semana.');
       return;
     }
 
@@ -126,7 +126,7 @@ export const ClassesPage: React.FC = () => {
       nomeCurso,
       livrosEstudados: livrosEstudados || null,
       horario,
-      diaSemana,
+      diaSemana: selectedDays.join(', '),
       vagasLimite: vagasLimite ? Number(vagasLimite) : null,
       instructorIds: selectedInstructors,
     };
@@ -354,17 +354,17 @@ export const ClassesPage: React.FC = () => {
                 </div>
 
                 <div className="space-y-2 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-primary" />
-                    <span>{cls.diaSemana}</span>
+                  <div className="flex items-start gap-2">
+                    <Calendar className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                    <span className="leading-tight">{cls.diaSemana}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-primary" />
+                    <Clock className="w-4 h-4 text-primary flex-shrink-0" />
                     <span>{cls.horario}</span>
                   </div>
                   {cls.livrosEstudados && (
                     <div className="flex items-center gap-2">
-                      <BookOpen className="w-4 h-4 text-primary" />
+                      <BookOpen className="w-4 h-4 text-primary flex-shrink-0" />
                       <span className="truncate">Livro: {cls.livrosEstudados}</span>
                     </div>
                   )}
@@ -464,24 +464,38 @@ export const ClassesPage: React.FC = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">
-                    Dia da Semana *
-                  </label>
-                  <select
-                    value={diaSemana}
-                    onChange={(e) => setDiaSemana(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-foreground"
-                  >
-                    {DAYS_OF_WEEK.map((d) => (
-                      <option key={d} value={d}>
-                        {d}
-                      </option>
-                    ))}
-                  </select>
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">
+                  Dias da Semana * (Selecione um ou mais)
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {DAYS_OF_WEEK.map((day) => {
+                    const selected = selectedDays.includes(day);
+                    return (
+                      <button
+                        key={day}
+                        type="button"
+                        onClick={() => {
+                          if (selected) {
+                            setSelectedDays(selectedDays.filter((d) => d !== day));
+                          } else {
+                            setSelectedDays([...selectedDays, day]);
+                          }
+                        }}
+                        className={`px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all ${
+                          selected
+                            ? 'bg-primary/10 border-primary text-primary'
+                            : 'bg-background border-border hover:bg-muted text-foreground'
+                        }`}
+                      >
+                        {day}
+                      </button>
+                    );
+                  })}
                 </div>
+              </div>
 
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">
                     Horário *
@@ -495,12 +509,10 @@ export const ClassesPage: React.FC = () => {
                     className="w-full px-3 py-2.5 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-foreground"
                   />
                 </div>
-              </div>
 
-              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">
-                    Limite de Vagas (padrão 50)
+                    Limite de Vagas
                   </label>
                   <input
                     type="number"
@@ -518,7 +530,7 @@ export const ClassesPage: React.FC = () => {
                   </label>
                   <input
                     type="text"
-                    placeholder="Ex: Apostila SEAS Vol 1"
+                    placeholder="Ex: Apostila 1"
                     value={livrosEstudados}
                     onChange={(e) => setLivrosEstudados(e.target.value)}
                     className="w-full px-3 py-2.5 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-foreground"

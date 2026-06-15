@@ -33,7 +33,7 @@ interface MockUser {
 const MOCK_USERS: MockUser[] = [
   {
     id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-    name: 'Carlos Gestor',
+    name: 'Nayla Nobre',
     email: 'admin@sges.com',
     role: 'admin',
     password: 'Senha123!',
@@ -50,7 +50,7 @@ const MOCK_USERS: MockUser[] = [
 let mockNotifications = [
   {
     id: 'n1',
-    userId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', // Carlos Gestor
+    userId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', // Nayla Nobre
     title: 'Alerta de Limite de Faltas Próximo',
     message: 'O estudante João Silva atingiu 2 faltas no curso Alfabetização. O limite máximo é de 3 faltas.',
     isRead: false,
@@ -58,7 +58,7 @@ let mockNotifications = [
   },
   {
     id: 'n2',
-    userId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', // Carlos Gestor
+    userId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', // Nayla Nobre
     title: 'Estudante Evadido por Faltas',
     message: 'O estudante Lucas Medeiros atingiu o limite de 3 faltas no curso Alfabetização e foi marcado como evadido.',
     isRead: false,
