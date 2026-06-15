@@ -14,7 +14,7 @@ Este documento apresenta o mapeamento completo dos Itens de Trabalho, estabelece
 | **Gestão de Instrutores**           | **US04** | Como gestor, quero cadastrar instrutores para organizar e controlar quem pode atuar nas atividades da instituição.           | • **CA04-01:** Instrutor salvo com identificador único (ID).<br>• **CA04-02:** Perfil de acesso definido com base em papéis (RBAC).                                                                                                                | RF04 - Cadastrar instrutor                 | RNF05, RNF11     |
 | **Gestão de Instrutores**           | **US05** | Como gestor, quero editar o perfil dos instrutores para manter os dados e permissões atualizados.                            | • **CA05-01:** Alterações persistidas com sucesso no banco de dados.<br>• **CA05-02:** Novas permissões refletidas imediatamente no acesso.                                                                                                        | RF05 - Editar perfil do instrutor          | RNF05, RNF02     |
 | **Gestão de Instrutores**           | **US06** | Como gestor, quero inativar instrutores para revogar acessos sem perder o histórico dos dados.                               | • **CA06-01:** Status do usuário alterado para "inativo".<br>• **CA06-02:** Autenticação bloqueada imediatamente para instrutores inativos.                                                                                                        | RF06 - Inativar instrutor                  | RNF02            |
-| **Cadastro Sociodemográfico**       | **US07** | Como gestor ou instrutor, quero cadastrar beneficiários vinculados a famílias para organizar melhor o acompanhamento social. | • **CA07-01:** Beneficiário criado com sucesso no sistema.<br>• **CA07-02:** Obrigatória a associação do beneficiário a um núcleo familiar válido.                                                                                                 | RF07 - Cadastrar beneficiário              | RNF01, RNF08     |
+| **Cadastro Sociodemográfico**       | **US07** | Como gestor ou instrutor, quero cadastrar beneficiários para organizar melhor o acompanhamento social. | • **CA07-01:** Beneficiário criado com sucesso no sistema. | RF07 - Cadastrar beneficiário              | RNF01, RNF08     |
 | **Cadastro Sociodemográfico**       | **US08** | Como gestor ou instrutor, quero editar os dados dos beneficiários para manter as informações atualizadas ao longo do tempo.  | • **CA08-01:** Alterações salvas com sucesso no banco de dados.<br>• **CA08-02:** Dados atualizados exibidos corretamente na interface de usuário.                                                                                                 | RF08 - Editar dados do beneficiário        | RNF01, RNF08     |
 | **Frequência e Engajamento**        | **US09** | Como gestor, quero cadastrar turmas com datas e vagas para organizar as atividades oferecidas pela instituição.              | • **CA09-01:** Turma criada com datas e horários válidos.<br>• **CA09-02:** Limite máximo de vagas definido no cadastro.<br>• **CA09-03:** Exibição correta da turma no catálogo institucional.                                                    | RF09 - Cadastrar Turma                     | RNF09, RNF11     |
 | **Frequência e Engajamento**        | **US10** | Como gestor ou instrutor, quero matricular beneficiários em turmas para controlar a participação nas atividades.             | • **CA10-01:** Vínculo de matrícula criado com sucesso.<br>• **CA10-02:** Sistema bloqueia novas matrículas caso o limite de vagas seja excedido.                                                                                                  | RF10 - Matricular beneficiário             | RNF09            |
@@ -29,71 +29,70 @@ Este documento apresenta o mapeamento completo dos Itens de Trabalho, estabelece
 
 # Matriz de Ação e Priorização
 
-Esta seção consolida a avaliação de todos os requisitos mapeados, cruzando o **Valor de Negócio** (Alto e Baixo) com o **Esforço Técnico** (Alto e Baixo) para determinar o quadrante de ação estratégico na esteira de desenvolvimento.
-
-![alt text](images/image5.png)
+Esta seção consolida a avaliação de todas as Histórias de Usuário (US) mapeadas no Backlog do Produto, cruzando o **Valor de Negócio** com o **Custo Técnico** para definir a ordem de priorização e o escopo do MVP (Produto Mínimo Viável).
 
 ---
 
-## 6.1 Métricas do Valor e Esforço
+## 6.1 Critérios de Priorização
 
-- **Valor (escala Likert 1 a 5):**
-  - **Alto Valor:** Requisitos avaliados entre 4 e 5 pelo cliente.
-  - **Baixo Valor:** Requisitos avaliados entre 1 e 3 pelo cliente.
+Para a priorização do backlog, foram utilizados os seguintes critérios:
 
-- **Esforço Técnico:**
-  - **Alto Esforço:** Tarefas que demandem mais de 12 horas para serem implementadas.
-  - **Baixo Esforço:** Tarefas que demandem menos de 12 horas para serem implementadas.
+*   **VB = Valor de Negócio (1 a 5):** Mede a importância da funcionalidade para o negócio e para os usuários finais da instituição.
+*   **CX = Complexidade Técnica (1 a 5):** Mede a dificuldade técnica esperada na implementação da funcionalidade.
+*   **ES = Esforço de Implementação (1 a 5):** Mede o tempo e recursos estimados para desenvolver a funcionalidade.
+
+### 1. Pontuação Técnica (PT)
+Para representar o "custo técnico" da US, calcula-se a média aritmética entre a complexidade e o esforço de implementação:
+
+$$PT = \frac{CX + ES}{2}$$
+
+Dessa forma, a pontuação técnica continua na mesma escala de 1 a 5.
+
+### 2. Índice de Prioridade (IP)
+Para comparar de forma objetiva o valor de negócio contra o custo técnico, calcula-se o Índice de Prioridade:
+
+$$IP = \frac{VB}{PT}$$
+
+Quanto maior o IP, maior a prioridade da História de Usuário.
+
+*   **IP alto (IP ≥ 1,50):** Muito valor de negócio para baixo/médio custo técnico.
+*   **IP médio (1,00 ≤ IP < 1,49):** Equilíbrio razoável entre valor e custo técnico.
+*   **IP baixo (IP < 1,00):** Pouco valor de negócio para alto custo técnico.
 
 ---
 
 ## 6.2 Matriz de Priorização
 
-### 1° Quadrante
+A partir do cruzamento entre Valor de Negócio (VB) e Pontuação Técnica (PT), as USs são classificadas em quatro quadrantes de decisão:
 
-- **Critérios:** Alto Valor, Baixo Esforço
-- **Ação:** Fazer primeiro
-- **Resultado:** Muito valor com pouco esforço
-
-### 2° Quadrante
-
-- **Critérios:** Alto Valor, Alto Esforço
-- **Ação:** Planejar cuidadosamente
-- **Resultado:** Importantes, consomem muitos recursos
-
-### 3° Quadrante
-
-- **Critérios:** Baixo Valor, Baixo Esforço
-- **Ação:** Fazer quando houver tempo
-- **Resultado:** Podem ser feitos entre tarefas maiores
-
-### 4° Quadrante
-
-- **Critérios:** Baixo Valor, Alto Esforço
-- **Ação:** Reconsiderar
-- **Resultado:** Muito esforço para pouco retorno
-
-> Definimos como **MVP** todas as US relacionadas ao **1° quadrante**, mas pretendemos entregar também os do **2° quadrante**.
+*   **Q1 – Alto valor / Baixa carga técnica:** USs com alto valor de negócio (VB ≥ 4) e baixo custo técnico (PT ≤ 2,5). Devem ser desenvolvidas primeiro (Prioridade 1) e compõem o escopo básico do **MVP**.
+*   **Q2 – Alto valor / Alta carga técnica:** USs com alto valor de negócio (VB ≥ 4) e alto custo técnico (PT ≥ 3). Exigem planejamento cuidadoso (Prioridade 2).
+*   **Q3 – Baixo valor / Baixa carga técnica:** USs com baixo valor de negócio (VB ≤ 3) e baixo custo técnico (PT ≤ 2,5). São secundárias e podem ser feitas após as prioritárias (Prioridade 3).
+*   **Q4 – Baixo valor / Alta carga técnica:** USs com baixo valor de negócio (VB ≤ 3) e alto custo técnico (PT ≥ 3). Devem ser reconsideradas ou postergadas.
 
 ---
 
 ## 6.3 Priorização dos Itens de Trabalho e MVP
 
-| US-ID | RF   | RNF Relacionado | Prioridade | Quadrante    | MVP |
-| ----- | ---- | --------------- | ---------- | ------------ | --- |
-| US01  | RF01 | RNF10, RNF02    | Must       | 1° Quadrante | X   |
-| US02  | RF02 | RNF01, RNF02    | Must       | 1° Quadrante | X   |
-| US03  | RF03 | RNF10           | Must       | 1° Quadrante | X   |
-| US04  | RF04 | RNF05, RNF11    | Must       | 1° Quadrante | X   |
-| US05  | RF05 | RNF05, RNF02    | Should     | 1° Quadrante | X   |
-| US06  | RF06 | RNF02           | Could      | 3° Quadrante |     |
-| US07  | RF07 | RNF01, RNF08    | Must       | 1° Quadrante | X   |
-| US08  | RF08 | RNF01, RNF08    | Should     | 1° Quadrante | X   |
-| US09  | RF09 | RNF09, RNF11    | Must       | 1° Quadrante | X   |
-| US10  | RF10 | RNF09           | Must       | 1° Quadrante | X   |
-| US11  | RF11 | RNF04, RNF05    | Must       | 2° Quadrante |     |
-| US12  | RF12 | RNF02           | Should     | 1° Quadrante | X   |
-| US13  | RF13 | RNF02           | Should     | 1° Quadrante | X   |
-| US14  | RF14 | RNF06           | Must       | 2° Quadrante |     |
-| US15  | RF15 | RNF01, RNF02    | Must       | 2° Quadrante |     |
-| US16  | RF16 | RNF03, RNF07    | Must       | 2° Quadrante |     |
+A tabela a seguir apresenta todas as Histórias de Usuário priorizadas com base nos critérios estabelecidos, ordenada de forma decrescente pela Prioridade Sugerida e pelo Índice de Prioridade (IP):
+
+| US | Descrição | VB | CX | ES | PT | IP | Quadrante | Prioridade sugerida |
+| :---: | :--- | :---: | :---: | :---: | :---: | :---: | :--- | :--- |
+| **US03** | Encerrar sessão | 5 | 1 | 1 | 1 | 5 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
+| **US01** | Autenticar usuário | 5 | 2 | 2 | 2 | 2,5 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
+| **US04** | Cadastrar instrutor | 5 | 2 | 2 | 2 | 2,5 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
+| **US07** | Cadastrar beneficiário | 5 | 2 | 2 | 2 | 2,5 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
+| **US09** | Cadastrar Turma | 5 | 2 | 2 | 2 | 2,5 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
+| **US10** | Matricular beneficiário | 5 | 2 | 2 | 2 | 2,5 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
+| **US02** | Redefinir senha de acesso | 4 | 2 | 2 | 2 | 2 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
+| **US05** | Editar perfil do instrutor | 4 | 2 | 2 | 2 | 2 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
+| **US08** | Editar dados do beneficiário | 4 | 2 | 2 | 2 | 2 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
+| **US12** | Alterar registro de frequência | 4 | 2 | 2 | 2 | 2 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
+| **US13** | Registrar falta justificada | 4 | 2 | 2 | 2 | 2 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
+| **US11** | Registrar presença em lote | 5 | 3 | 3 | 3 | 1,67 | Q2 Alto valor / Alta carga técnica | Prioridade 2 |
+| **US15** | Consultar histórico do beneficiário | 4 | 3 | 3 | 3 | 1,33 | Q2 Alto valor / Alta carga técnica | Prioridade 2 |
+| **US16** | Gerar relatório de frequência | 4 | 3 | 3 | 3 | 1,33 | Q2 Alto valor / Alta carga técnica | Prioridade 2 |
+| **US14** | Emitir alerta de evasão | 5 | 4 | 4 | 4 | 1,25 | Q2 Alto valor / Alta carga técnica | Prioridade 2 |
+| **US06** | Inativar instrutor | 3 | 1 | 2 | 1,5 | 2 | Q3 Baixo valor / Baixa carga técnica | Prioridade 3 |
+
+> **Nota:** Definimos como escopo do **MVP (Produto Mínimo Viável)** todas as Histórias de Usuário classificadas como **Prioridade 1** (Q1), garantindo a entrega do core funcional do sistema com menor complexidade de desenvolvimento. As demais funcionalidades (Prioridade 2 e 3) serão implementadas em sprints subsequentes.
