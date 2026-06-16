@@ -112,7 +112,7 @@ Os requisitos e implementações serão revisados entre os membros da equipe par
 
 ### Feedback com Stakeholders
 
-As entregas serão apresentadas ao cliente ao final das sprints para validação contínua da solução.
+As entregas serão apresentadas ao cliente ao final das Iterações para validação contínua da solução.
 
 ### Análise de Viabilidade
 

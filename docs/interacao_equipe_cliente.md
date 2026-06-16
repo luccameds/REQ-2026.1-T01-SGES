@@ -4,11 +4,10 @@
 
 | Papel                  | Descrição                                                                                                                         | Responsável     | Participantes           |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------- | ----------------------- |
-| Gerente de Projeto     | Responsável pelo planejamento estratégico das entregas e alinhar expectativas entre os times                                      | Gabriel Pereira | Matheus Eiki            |
+| Gerente de Projeto     | Responsável pelo planejamento estratégico das entregas e alinhar expectativas entre os times                                      | Gabriel Pereira | Vinicius            |
 | Desenvolvedor Backend  | Responsável pelo desenvolvimento da lógica e integrações com serviços e provedores                                                | Gabriel Magioli | Vinicius, Gabriel P     |
-| Desenvolvedor Frontend | Responsável pelo desenvolvimento de telas e integrações com o backend                                                             | Lucca Medeiros  | Matheus Eiki, Gabriel P |
-| Analista de QA         | Responsável por validar as regras de negócio e assegurar o correto funcionamento da aplicação                                     | Matheus Eiki    | Guilherme               |
-| Prototipação           | Definições das interfaces que servem como base para o desenvolvimento e identificação dos problemas dos clientes de forma visual. | Matheus Eiki    | Guilherme               |
+| Desenvolvedor Frontend | Responsável pelo desenvolvimento de telas e integrações com o backend                                                             | Lucca Medeiros  | Gabriel P |
+| Analista de QA         | Responsável por validar as regras de negócio e assegurar o correto funcionamento da aplicação                                     | Guilherme     | Lucca Medeiros |
 | Analista de Requisitos | Define os requisitos funcionais e não funcionais do sistema e garante que eles sejam atendidos                                    | Guilherme       | Gabriel P               |
 
 ## 8.2. Comunicação e Reuniões
@@ -20,10 +19,6 @@
 - **WhatsApp:** Será utilizado para comunicação pontual e direta entre os integrantes da equipe e o cliente. Por sua praticidade e agilidade, o WhatsApp servirá como canal para interações rápidas e informais ao longo do desenvolvimento, especialmente em situações que demandem respostas imediatas, esclarecimentos de dúvidas ou necessidade de ajustes emergenciais fora dos ciclos formais de reunião.
 
 - **Email:** Será utilizado como canal formal de comunicação com o cliente para registrar decisões, alinhamentos, aprovações e histórico de discussões do projeto. Sempre que houver definições relevantes ou encaminhamentos que precisem de rastreabilidade, o registro será consolidado por e-mail.
-
-- **Jira:** Será a ferramenta central de gerenciamento do backlog, controle de tarefas e acompanhamento do progresso de cada iteração. Através do Jira, tanto a equipe quanto o cliente poderão visualizar em tempo real o andamento do projeto, participar ativamente do processo de priorização das funcionalidades e garantir que as entregas estejam alinhadas com os objetivos definidos em cada ciclo.
-
-- **TLDraw:** Será utilizado como quadro colaborativo para diagramações e planejamento visual de funcionalidades. A ferramenta possibilitará a criação de fluxos, protótipos de interface, mapas de arquitetura e demais documentações visuais necessárias durante as etapas de planejamento e refinamento do projeto, facilitando o alinhamento visual entre os membros da equipe.
 
 ### Métodos e Frequência de Reuniões (Abordagem OpenUP)
 

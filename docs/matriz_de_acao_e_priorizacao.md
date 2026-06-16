@@ -1,10 +1,10 @@
 # Engenharia de Requisitos: Especificação de Casos de Uso e Rastreabilidade
 
-Seguindo as diretrizes metodológicas do framework OpenUP, o escopo funcional do SGES foi completamente modelado por meio de **Casos de Uso (CSU)**. A matriz abaixo estabelece a rastreabilidade estrita entre os blocos de entrega, os atores, o gerenciamento de prioridades (MoSCoW / Quadrantes de Valor) e o detalhamento dos fluxos de eventos.
+Seguindo as diretrizes metodológicas do framework OpenUP, o escopo funcional do SGES foi completamente modelado por meio de **Casos de Uso (CSU)**. A matriz abaixo estabelece a rastreabilidade estrita entre os blocos de entrega, os atores, o gerenciamento de prioridades Quadrantes de Valor e o detalhamento dos fluxos de eventos.
 
-## Tabela Geral de Especificação de Casos de Uso e Rastreabilidade (OpenUP)
+# Tabela Geral de Especificação de Casos de Uso e Rastreabilidade (OpenUP)
 
-# Engenharia de Requisitos: Especificação de Casos de Uso e Rastreabilidade
+## Engenharia de Requisitos: Especificação de Casos de Uso e Rastreabilidade
 
 Seguindo as diretrizes metodológicas do framework OpenUP, o escopo funcional do SGES foi completamente modelado por meio de **Casos de Uso (CSU)**. A matriz abaixo estabelece a rastreabilidade estrita entre as capacidades do sistema, os atores principais, os módulos correspondentes e o detalhamento dos fluxos de eventos e exceções.
 
@@ -38,7 +38,7 @@ Esta seção consolida a avaliação de todos os Casos de Uso (CSU) mapeados no 
 
 ## 6.1 Critérios de Priorização
 
-Para a priorização do backlog, foram utilizados os seguintes critérios:
+Para a priorização dos itens de trabalho, foram utilizados os seguintes critérios:
 
 *   **VN = Valor de Negócio (1 a 5):** Mede a importância da funcionalidade para o negócio e para os usuários finais da instituição.
 *   **CT = Complexidade Técnica (1 a 5):** Mede a dificuldade técnica esperada na implementação da funcionalidade.
@@ -98,4 +98,4 @@ A tabela a seguir apresenta todos os Casos de Uso priorizados com base nos crit�
 | **CSU15** | Gerar relatório de frequência | 4 | 3 | 3 | 3 | 1,33 | Q2 Alto valor / Alta carga técnica | Prioridade 2 |
 | **CSU16** | Inativar instrutor | 3 | 1 | 2 | 1,5 | 2 | Q3 Baixo valor / Baixa carga técnica | Prioridade 3 |
 
-> **Nota:** Definimos como escopo do **MVP (Produto Mínimo Viável)** todas os Casos de Uso classificados como **Prioridade 1** (Q1), garantindo a entrega do core funcional do sistema com menor complexidade de desenvolvimento. As demais funcionalidades (Prioridade 2 e 3) serão implementadas em sprints subsequentes.
+> **Nota:** Definimos como escopo do **MVP (Produto Mínimo Viável)** todas os Casos de Uso classificados como **Prioridade 1** (Q1), garantindo a entrega do core funcional do sistema com menor complexidade de desenvolvimento. As demais funcionalidades (Prioridade 2 e 3) serão implementadas em Iterações subsequentes.
