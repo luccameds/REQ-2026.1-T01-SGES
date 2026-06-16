@@ -1,9 +1,17 @@
-# **APRESENTAÇÃO DE MVP - UNIDADE 3**
+# **VÍDEO DE APRESENTAÇÃO DO MVP – CONSTRUÇÃO ITERAÇÃO 1**
+
+> **Rastreabilidade:** Esta validação comprova o marco da **Construção - Iteração 1** do projeto. Marco correspondente na [Tabela de Planejamento de Fases e Iterações](cronograma_e_entregas.md#tabela-de-planejamento-de-fases-e-iteracoes).
+
+---
+
+## **VÍDEO DE APRESENTAÇÃO**
 
 <video controls width="100%">
   <source src="../videos/Apresentacao_MVP.mp4" type="video/mp4">
   Seu navegador não suporta a reprodução de vídeos em HTML5.
 </video>
+
+---
 
 ## **Descrição do Vídeo e Evolução do Projeto**
 
