@@ -32,7 +32,7 @@ Seguindo as diretrizes metodológicas do framework OpenUP, o escopo funcional do
 
 # Matriz de Ação e Priorização
 
-Esta seção consolida a avaliação de todas as Histórias de Usuário (US) mapeadas no Backlog do Produto, cruzando o **Valor de Negócio** com o **Custo Técnico** para definir a ordem de priorização e o escopo do MVP (Produto Mínimo Viável).
+Esta seção consolida a avaliação de todos os Casos de Uso (CSU) mapeados no escopo funcional do SGES, cruzando o **Valor de Negócio** com o **Custo Técnico** para definir a ordem de priorização e o escopo do MVP (Produto Mínimo Viável).
 
 ---
 
@@ -45,7 +45,7 @@ Para a priorização do backlog, foram utilizados os seguintes critérios:
 *   **EF = Esforço de Implementação (1 a 5):** Mede o tempo e recursos estimados para desenvolver a funcionalidade.
 
 ### 1. Pontuação Técnica (PT)
-Para representar o "custo técnico" da US, calcula-se a média aritmética entre a complexidade e o esforço de implementação:
+Para representar o "custo técnico" do Caso de Uso, calcula-se a média aritmética entre a complexidade e o esforço de implementação:
 
 $$PT = \frac{CT + EF}{2}$$
 
@@ -56,7 +56,7 @@ Para comparar de forma objetiva o valor de negócio contra o custo técnico, cal
 
 $$IP = \frac{VN}{PT}$$
 
-Quanto maior o IP, maior a prioridade da História de Usuário.
+Quanto maior o IP, maior a prioridade do Caso de Uso.
 
 *   **IP alto (IP ≥ 1,50):** Muito valor de negócio para baixo/médio custo técnico.
 *   **IP médio (1,00 ≤ IP < 1,49):** Equilíbrio razoável entre valor e custo técnico.
@@ -66,36 +66,36 @@ Quanto maior o IP, maior a prioridade da História de Usuário.
 
 ## 6.2 Matriz de Priorização
 
-A partir do cruzamento entre Valor de Negócio (VN) e Pontuação Técnica (PT), as USs são classificadas em quatro quadrantes de decisão:
+A partir do cruzamento entre Valor de Negócio (VN) e Pontuação Técnica (PT), os CSUs são classificadas em quatro quadrantes de decisão:
 
-*   **Q1 – Alto valor / Baixa carga técnica:** USs com alto valor de negócio (VN ≥ 4) e baixo custo técnico (PT ≤ 2,5). Devem ser desenvolvidas primeiro (Prioridade 1) e compõem o escopo básico do **MVP**.
-*   **Q2 – Alto valor / Alta carga técnica:** USs com alto valor de negócio (VN ≥ 4) e alto custo técnico (PT ≥ 3). Exigem planejamento cuidadoso (Prioridade 2).
-*   **Q3 – Baixo valor / Baixa carga técnica:** USs com baixo valor de negócio (VN ≤ 3) e baixo custo técnico (PT ≤ 2,5). São secundárias e podem ser feitas após as prioritárias (Prioridade 3).
-*   **Q4 – Baixo valor / Alta carga técnica:** USs com baixo valor de negócio (VN ≤ 3) e alto custo técnico (PT ≥ 3). Devem ser reconsideradas ou postergadas.
+*   **Q1 – Alto valor / Baixa carga técnica:** CSUs com alto valor de negócio (VN ≥ 4) e baixo custo técnico (PT ≤ 2,5). Devem ser desenvolvidos primeiro (Prioridade 1) e compõem o escopo básico do **MVP**.
+*   **Q2 – Alto valor / Alta carga técnica:** CSUs com alto valor de negócio (VN ≥ 4) e alto custo técnico (PT ≥ 3). Exigem planejamento cuidadoso (Prioridade 2).
+*   **Q3 – Baixo valor / Baixa carga técnica:** CSUs com baixo valor de negócio (VN ≤ 3) e baixo custo técnico (PT ≤ 2,5). São secundários e podem ser feitos após os prioritários (Prioridade 3).
+*   **Q4 – Baixo valor / Alta carga técnica:** CSUs com baixo valor de negócio (VN ≤ 3) e alto custo técnico (PT ≥ 3). Devem ser reconsiderados ou postergados.
 
 ---
 
 ## 6.3 Priorização dos Itens de Trabalho e MVP
 
-A tabela a seguir apresenta todas as Histórias de Usuário priorizadas com base nos critérios estabelecidos, ordenada pelo identificador da História de Usuário (US):
+A tabela a seguir apresenta todos os Casos de Uso priorizados com base nos critérios estabelecidos, ordenada pelo identificador do Caso de Uso (CSU):
 
-| US | Descrição | VN | CT | EF | PT | IP | Quadrante | Prioridade sugerida |
+| CSU | Descrição | VN | CT | EF | PT | IP | Quadrante | Prioridade sugerida |
 | :---: | :--- | :---: | :---: | :---: | :---: | :---: | :--- | :--- |
 | **CSU01** | Autenticar usuário | 5 | 2 | 2 | 2 | 2,5 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
 | **CSU02** | Redefinir senha de acesso | 4 | 2 | 2 | 2 | 2 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
 | **CSU03** | Encerrar sessão | 5 | 1 | 1 | 1 | 5 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
 | **CSU04** | Cadastrar instrutor | 5 | 2 | 2 | 2 | 2,5 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
 | **CSU05** | Editar perfil do instrutor | 4 | 2 | 2 | 2 | 2 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
-| **CSU06** | Inativar instrutor | 3 | 1 | 2 | 1,5 | 2 | Q3 Baixo valor / Baixa carga técnica | Prioridade 3 |
-| **CSU07** | Cadastrar beneficiário | 5 | 2 | 2 | 2 | 2,5 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
-| **CSU08** | Editar dados do beneficiário | 4 | 2 | 2 | 2 | 2 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
-| **CSU09** | Cadastrar Turma | 5 | 2 | 2 | 2 | 2,5 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
-| **CSU10** | Matricular beneficiário | 5 | 2 | 2 | 2 | 2,5 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
-| **CSU11** | Registrar presença em lote | 5 | 3 | 3 | 3 | 1,67 | Q2 Alto valor / Alta carga técnica | Prioridade 2 |
-| **CSU12** | Alterar registro de frequência | 4 | 2 | 2 | 2 | 2 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
-| **CSU13** | Registrar falta justificada | 4 | 2 | 2 | 2 | 2 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
-| **CSU14** | Emitir alerta de evasão | 5 | 4 | 4 | 4 | 1,25 | Q2 Alto valor / Alta carga técnica | Prioridade 2 |
-| **CSU15** | Consultar histórico do beneficiário | 4 | 3 | 3 | 3 | 1,33 | Q2 Alto valor / Alta carga técnica | Prioridade 2 |
-| **CSU16** | Gerar relatório de frequência | 4 | 3 | 3 | 3 | 1,33 | Q2 Alto valor / Alta carga técnica | Prioridade 2 |
+| **CSU06** | Cadastrar beneficiário | 5 | 2 | 2 | 2 | 2,5 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
+| **CSU07** | Editar dados do beneficiário | 4 | 2 | 2 | 2 | 2 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
+| **CSU08** | Cadastrar turma | 5 | 2 | 2 | 2 | 2,5 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
+| **CSU09** | Matricular beneficiário | 5 | 2 | 2 | 2 | 2,5 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
+| **CSU10** | Alterar registro de frequência | 4 | 2 | 2 | 2 | 2 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
+| **CSU11** | Registrar falta justificada | 4 | 2 | 2 | 2 | 2 | Q1 Alto valor / Baixa carga técnica | Prioridade 1 |
+| **CSU12** | Registrar presença em lote | 5 | 3 | 3 | 3 | 1,67 | Q2 Alto valor / Alta carga técnica | Prioridade 2 |
+| **CSU13** | Emitir alerta de evasão | 5 | 4 | 4 | 4 | 1,25 | Q2 Alto valor / Alta carga técnica | Prioridade 2 |
+| **CSU14** | Consultar histórico do beneficiário | 4 | 3 | 3 | 3 | 1,33 | Q2 Alto valor / Alta carga técnica | Prioridade 2 |
+| **CSU15** | Gerar relatório de frequência | 4 | 3 | 3 | 3 | 1,33 | Q2 Alto valor / Alta carga técnica | Prioridade 2 |
+| **CSU16** | Inativar instrutor | 3 | 1 | 2 | 1,5 | 2 | Q3 Baixo valor / Baixa carga técnica | Prioridade 3 |
 
 > **Nota:** Definimos como escopo do **MVP (Produto Mínimo Viável)** todas os Casos de Uso classificados como **Prioridade 1** (Q1), garantindo a entrega do core funcional do sistema com menor complexidade de desenvolvimento. As demais funcionalidades (Prioridade 2 e 3) serão implementadas em sprints subsequentes.
