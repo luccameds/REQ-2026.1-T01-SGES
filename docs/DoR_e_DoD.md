@@ -8,7 +8,7 @@ Para que um requisito seja considerado **Ready**, os seguintes critérios devem 
 
 * O requisito está representado por um **Caso de Uso**?
 
-* O requisito possui **Critérios de Aceitação** orientados por **Behavior Driven Development (BDD)** e testes?
+* O requisito possui **Critérios de Aceitação** definidos?
 
 * O requisito está no mesmo grau de abstração dos demais requisitos?
 
