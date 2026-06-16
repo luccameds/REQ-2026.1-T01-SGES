@@ -29,7 +29,7 @@ A equipe de desenvolvimento realizará comunicação assíncrona semanalmente pa
 Ao final de cada iteração, a equipe realizará uma reunião formal de avaliação de resultados. Nesse momento, as funcionalidades desenvolvidas no ciclo são analisadas para verificar se cumprem os critérios de aceite estabelecidos. O resultado dessa avaliação mede o progresso real em relação aos objetivos de alto nível da fase e ajuda a calibrar o escopo para a iteração seguinte.
 
 #### Planejamento de Iteração
-No início de cada novo ciclo, a equipe se reúne para estruturar o próximo Plano de Iteração. Nessa etapa, o escopo macro definido no Plano de Projeto é revisado e as Histórias de Usuários prioritárias da Lista de Itens de Trabalho são subdivididos em tarefas de desenvolvimento menores e distribuídos entre os membros da equipe de acordo com suas capacidades e estimativas de esforço.
+No início de cada novo ciclo, a equipe se reúne para estruturar o próximo Plano de Iteração. Nessa etapa, o escopo macro definido no Plano de Projeto é revisado e os Casos de Uso prioritários da Lista de Itens de Trabalho são subdivididos em tarefas de desenvolvimento menores e distribuídos entre os membros da equipe de acordo com suas capacidades e estimativas de esforço.
 
 #### Retrospectiva e Lições Aprendidas
 Também integrada ao encerramento da iteração, a equipe realiza uma sessão de retrospectiva com o objetivo de refletir sobre o processo de Engenharia de Software adotado. São identificados os pontos fortes, os gargalos técnicos e organizacionais e os desvios de planejamento. Os aprendizados são registrados diretamente como Lições Aprendidas no Plano de Projeto para garantir a evolução contínua da qualidade e dos processos da equipe.
@@ -39,10 +39,10 @@ Também integrada ao encerramento da iteração, a equipe realiza uma sessão de
 ### Frequência de Interações com o Cliente
 
 #### Demonstração de Resultados e Checkpoints
-Pelo menos um representante da organização cliente (Stakeholder) estará diretamente envolvido nos checkpoints de encerramento de cada iteração, realizados ao término de cada ciclo de desenvolvimento. Nessas sessões, o cliente poderá validar os micro-incrementos entregues, testar as capacidades funcionais das Histórias de Usuário implementadas e fornecer o feedback necessário para orientar a priorização das próximas iterações.
+Pelo menos um representante da organização cliente (Stakeholder) estará diretamente envolvido nos checkpoints de encerramento de cada iteração, realizados ao término de cada ciclo de desenvolvimento. Nessas sessões, o cliente poderá validar os micro-incrementos entregues, testar as capacidades funcionais dos Casos de Uso implementados e fornecer o feedback necessário para orientar a priorização das próximas iterações.
 
 #### Alinhamento de Escopo e Informativos
-Após a consolidação do planejamento de cada ciclo, a gerência de projeto enviará via WhatsApp para o cliente um informativo detalhado contendo o conjunto de Histórias de Usuário e capacidades técnicas que serão abordados ao longo da iteração seguinte. Essa prática garante a transparência contínua e o alinhamento estrito de expectativas entre a equipe de desenvolvimento e as necessidades do negócio do cliente.
+Após a consolidação do planejamento de cada ciclo, a gerência de projeto enviará via WhatsApp para o cliente um informativo detalhado contendo o conjunto de Casos de Uso e capacidades técnicas que serão abordados ao longo da iteração seguinte. Essa prática garante a transparência contínua e o alinhamento estrito de expectativas entre a equipe de desenvolvimento e as necessidades do negócio do cliente.
 
 ## 8.3. Processo de Validação
 
