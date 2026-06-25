@@ -7,9 +7,21 @@ theme:
   name: material
   language: pt-BR
   palette:
+    # Ativa o Tema Claro por padrão
+    - scheme: default
+      primary: blue
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Mudar para tema escuro
+    # Ativa o Tema Escuro
     - scheme: slate
       primary: blue
       accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Mudar para tema claro
+
   font:
     text: Source Sans 3
     code: JetBrains Mono
@@ -21,6 +33,7 @@ theme:
     - navigation.indexes
     - content.code.copy
     - content.tabs.link
+
 
 nav:
   - "Início": index.md
@@ -39,6 +52,7 @@ nav:
       - "11. Arquitetura do Produto": "arquitetura_do_produto.md"
 
   - "Lista de itens de Trabalho":
+      - Andamento: ./lista_trabalhos/andamento.md
       - "CSU01":
         - "fluxo": ./lista_trabalhos/csu01/fluxo.md
         - "DoR & DoD": ./lista_trabalhos/csu01/DoR_DoD.md
@@ -89,10 +103,14 @@ nav:
         - "DoR & DoD": ./lista_trabalhos/csu16/DoR_DoD.md
 
   - "Marcos de iterações":
-      - "Ata da Reunião de Validação do Escopo e Objetivos": reuniao_de_alinhamento.md
-      - "Ata da Reunião de Validação de Requisitos": reuniao_de_requisitos.md
-      - "Vídeo de Apresentação do MVP": validacao_unidade_3.md
-      - "Áudio referente a Reunião - 1 Iteração": audio_reuniao.md
+      - "1. Reunião com a cliente":
+        - "Ata da Reunião de Validação do Escopo e Objetivos": reuniao_de_alinhamento.md
+        - "Ata da Reunião de Validação de Requisitos": reuniao_de_requisitos.md
+        - "Vídeo de Apresentação do MVP": validacao_unidade_3.md
+      - "2. Engenharia de Requisitos":
+        - "Áudio referente a Reunião - 1 Iteração": audio_reuniao.md
+      - "3. Engenharia de Software":
+        - "a": a.md
   - "Gravações":
       - "Vídeo da Unidade 1": unidade_1_video.md
       - "Vídeo da Unidade 2": unidade_2_video.md
@@ -105,7 +123,11 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.arithmatex:
       generic: true
 
