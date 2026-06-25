@@ -1,6 +1,9 @@
 # SGES
 ## Especificação de Caso de Uso: CSU04 (RF04) - Cadastrar instrutor
 
+[Matriz de Priorização](../../matriz_de_acao_e_priorizacao.md) <br> 
+[Andamento](../andamento.md)
+
 ---
 
 ### 1. Breve Descrição

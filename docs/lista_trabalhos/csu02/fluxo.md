@@ -1,6 +1,9 @@
 # SGES
 ## Especificação de Caso de Uso: CSU02 (RF02) - Redefinir senha de acesso
 
+[Matriz de Priorização](../../matriz_de_acao_e_priorizacao.md) <br>  
+[Andamento](../andamento.md)
+
 ---
 
 ### 1. Breve Descrição

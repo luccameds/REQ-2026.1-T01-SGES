@@ -1,6 +1,9 @@
 # SGES
 ## Especificação de Caso de Uso: CSU15 (RF16) - Gerar relatório de frequência
 
+[Matriz de Priorização](../../matriz_de_acao_e_priorizacao.md) <br> 
+[Andamento](../andamento.md)
+
 ---
 
 ### 1. Breve Descrição

@@ -1,6 +1,9 @@
 # SGES
 ## Especificação de Caso de Uso: CSU16 (RF06) - Inativar instrutor
 
+[Matriz de Priorização](../../matriz_de_acao_e_priorizacao.md)<br> 
+[Andamento](../andamento.md)
+
 ---
 
 ### 1. Breve Descrição

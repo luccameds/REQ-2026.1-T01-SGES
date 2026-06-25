@@ -1,6 +1,9 @@
 # SGES
 ## Especificação de Caso de Uso: CSU05 (RF05) - Editar perfil do instrutor
 
+[Matriz de Priorização](../../matriz_de_acao_e_priorizacao.md) <br> 
+[Andamento](../andamento.md)
+
 ---
 
 ### 1. Breve Descrição

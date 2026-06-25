@@ -1,6 +1,9 @@
 # SGES
 ## Especificação de Caso de Uso: CSU14 (RF15) - Consultar histórico do beneficiário
 
+[Matriz de Priorização](../../matriz_de_acao_e_priorizacao.md) <br> 
+[Andamento](../andamento.md)
+
 ---
 
 ### 1. Breve Descrição

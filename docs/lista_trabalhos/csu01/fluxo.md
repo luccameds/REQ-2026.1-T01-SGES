@@ -1,6 +1,9 @@
 # SGES
 ## Especificação de Caso de Uso: CSU01 (RF01) - Autenticar usuário
 
+[Matriz de Priorização](../../matriz_de_acao_e_priorizacao.md) <br> 
+[Andamento](../andamento.md)
+
 ---
 
 ### 1. Breve Descrição

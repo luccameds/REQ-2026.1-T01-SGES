@@ -1,6 +1,9 @@
 # SGES
 ## Especificação de Caso de Uso: CSU03 (RF03) - Encerrar sessão
 
+[Matriz de Priorização](../../matriz_de_acao_e_priorizacao.md) <br> 
+[Andamento](../andamento.md)
+
 ---
 
 ### 1. Breve Descrição
