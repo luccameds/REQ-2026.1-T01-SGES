@@ -7,7 +7,15 @@ import type { RegisterPresenceInput } from '@/application/usecases/teacher-regis
 export class RegisterAttendanceZodValidator implements Validator<RegisterPresenceInput> {
   private schema = z.object({
     classId: z.string().uuid(),
-    date: z.coerce.date(),
+    date: z.union([
+      z.string()
+        .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format')
+        .transform(s => {
+          const [y, m, d] = s.split('-').map(Number)
+          return new Date(y, m - 1, d, 12, 0, 0)
+        }),
+      z.date().transform(dt => new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), 12, 0, 0)),
+    ]),
     alertThreshold: z.number().int().min(1).optional(),
     attendances: z.array(
       z.object({

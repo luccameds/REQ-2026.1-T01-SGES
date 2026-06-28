@@ -13,9 +13,16 @@ export class AttendanceTypeormRepository implements AttendanceRepository {
     return this.toAttendance(entity)
   }
 
+  private toLocalDateStr(date: Date): string {
+    const y = date.getFullYear()
+    const m = String(date.getMonth() + 1).padStart(2, '0')
+    const d = String(date.getDate()).padStart(2, '0')
+    return `${y}-${m}-${d}`
+  }
+
   async findByStudentClassAndDate(studentId: string, classId: string, date: Date): Promise<Attendance | null> {
     const repo = this.dataSource.getRepository(AttendanceEntity)
-    const formattedDate = date.toISOString().split('T')[0]
+    const formattedDate = this.toLocalDateStr(date)
     const entity = await repo
       .createQueryBuilder('attendance')
       .where('attendance.student_id = :studentId', { studentId })
@@ -29,7 +36,7 @@ export class AttendanceTypeormRepository implements AttendanceRepository {
 
   async findByClassAndDate(classId: string, date: Date): Promise<Attendance[]> {
     const repo = this.dataSource.getRepository(AttendanceEntity)
-    const formattedDate = date instanceof Date ? date.toISOString().split('T')[0] : date
+    const formattedDate = this.toLocalDateStr(date)
     const entities = await repo
       .createQueryBuilder('attendance')
       .where('attendance.class_id = :classId', { classId })

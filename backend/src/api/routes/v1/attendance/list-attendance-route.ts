@@ -12,7 +12,10 @@ export default async function (req: Request, res: Response) {
     throw new ValidationError([{ code: 'custom', path: ['date'], message: 'date is required (YYYY-MM-DD)' } as any])
   }
 
+  const [y, m, d] = (date as string).split('-').map(Number)
+  const parsedDate = new Date(y, m - 1, d, 12, 0, 0)
+
   const usecase = container.ListAttendanceByDateUsecase
-  const output = await usecase.execute({ classId, date: new Date(date) })
+  const output = await usecase.execute({ classId, date: parsedDate })
   return res.status(200).json(output)
 }

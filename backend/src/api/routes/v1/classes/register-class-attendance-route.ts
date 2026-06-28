@@ -9,7 +9,7 @@ export default async function (req: Request, res: Response) {
   const usecase = container.TeacherRegisterPresenceUsecase
   const output = await usecase.execute({
     classId,
-    date: new Date(date),
+    date,
     attendances: attendances.map((a: { studentId: string; status: AttendanceStatus; justification?: string }) => ({
       studentId: a.studentId,
       status: a.status,
