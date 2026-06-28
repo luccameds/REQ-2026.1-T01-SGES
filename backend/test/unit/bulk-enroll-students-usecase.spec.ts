@@ -1,6 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { BulkEnrollStudentsUseCase } from '@/application/usecases/bulk-enroll-students-usecase'
 import { EnrollmentStatus } from '@/domain'
+import type { Validator } from '@/application/infra/services/shared/validator'
+import type { BulkEnrollStudentsInput } from '@/application/usecases/bulk-enroll-students-usecase'
 import type { StudentRepository } from '@/application/services/student-repository'
 import type { ClassRepository } from '@/application/services/class-repository'
 import type { EnrollmentRepository } from '@/application/services/enrollment-repository'
@@ -35,10 +37,15 @@ const makeEnrollment = (studentId: string) => ({
   updatedAt: new Date(),
 })
 
+const makeValidator = (): Validator<BulkEnrollStudentsInput> => ({
+  validate: vi.fn().mockImplementation(async (input) => input),
+})
+
 describe('BulkEnrollStudentsUseCase', () => {
   let studentRepository: StudentRepository
   let classRepository: ClassRepository
   let enrollmentRepository: EnrollmentRepository
+  let validator: Validator<BulkEnrollStudentsInput>
   let sut: BulkEnrollStudentsUseCase
 
   beforeEach(() => {
@@ -66,7 +73,8 @@ describe('BulkEnrollStudentsUseCase', () => {
       updateStatus: vi.fn(),
       deleteById: vi.fn(),
     }
-    sut = new BulkEnrollStudentsUseCase(studentRepository, classRepository, enrollmentRepository)
+    validator = makeValidator()
+    sut = new BulkEnrollStudentsUseCase(studentRepository, classRepository, enrollmentRepository, validator)
   })
 
   it('should enroll all students successfully when all are valid', async () => {

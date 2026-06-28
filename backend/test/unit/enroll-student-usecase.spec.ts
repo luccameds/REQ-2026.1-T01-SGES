@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { EnrollStudentUseCase } from '@/application/usecases/enroll-student-usecase'
 import { EnrollmentStatus } from '@/domain'
 import { AppError, ConflictError, NotFoundError } from '@/application/infra/errors'
+import type { Validator } from '@/application/infra/services/shared/validator'
+import type { EnrollStudentInput } from '@/application/usecases/enroll-student-usecase'
 import type { StudentRepository } from '@/application/services/student-repository'
 import type { ClassRepository } from '@/application/services/class-repository'
 import type { EnrollmentRepository } from '@/application/services/enrollment-repository'
@@ -36,10 +38,15 @@ const makeEnrollment = () => ({
   updatedAt: new Date(),
 })
 
+const makeValidator = (): Validator<EnrollStudentInput> => ({
+  validate: vi.fn().mockImplementation(async (input) => input),
+})
+
 describe('EnrollStudentUseCase', () => {
   let studentRepository: StudentRepository
   let classRepository: ClassRepository
   let enrollmentRepository: EnrollmentRepository
+  let validator: Validator<EnrollStudentInput>
   let sut: EnrollStudentUseCase
 
   beforeEach(() => {
@@ -67,7 +74,8 @@ describe('EnrollStudentUseCase', () => {
       updateStatus: vi.fn(),
       deleteById: vi.fn(),
     }
-    sut = new EnrollStudentUseCase(studentRepository, classRepository, enrollmentRepository)
+    validator = makeValidator()
+    sut = new EnrollStudentUseCase(studentRepository, classRepository, enrollmentRepository, validator)
   })
 
   it('should enroll student successfully', async () => {

@@ -112,10 +112,10 @@ export function buildContainer() {
     )
     // Enrollment use cases
     .add('EnrollStudentUsecase', ({ StudentRepository, ClassRepository, EnrollmentRepository }) =>
-      new EnrollStudentUseCase(StudentRepository, ClassRepository, EnrollmentRepository),
+      new EnrollStudentUseCase(StudentRepository, ClassRepository, EnrollmentRepository, new EnrollStudentZodValidator()),
     )
     .add('BulkEnrollStudentsUsecase', ({ StudentRepository, ClassRepository, EnrollmentRepository }) =>
-      new BulkEnrollStudentsUseCase(StudentRepository, ClassRepository, EnrollmentRepository),
+      new BulkEnrollStudentsUseCase(StudentRepository, ClassRepository, EnrollmentRepository, new BulkEnrollStudentsZodValidator()),
     )
     .add('GetEnrollmentAbsencesUsecase', ({ EnrollmentRepository, AttendanceRepository }) =>
       new GetEnrollmentAbsencesUseCase(EnrollmentRepository, AttendanceRepository),
@@ -137,6 +137,7 @@ export function buildContainer() {
         UserRepository,
         NotificationRepository,
         emailService,
+        new RegisterAttendanceZodValidator(),
       ),
     )
     .add('ListAttendanceByDateUsecase', ({
