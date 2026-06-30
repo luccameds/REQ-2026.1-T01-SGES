@@ -5,10 +5,12 @@ import type { TokenPayload } from '@/application/services/token-service'
 import { UserRole } from '@/domain'
 
 const mockVerify = vi.hoisted(() => vi.fn())
+const mockFindByEmail = vi.hoisted(() => vi.fn().mockResolvedValue({ id: 'any-id', email: 'user@test.com', active: true }))
 
 vi.mock('@/infra/container/container', () => ({
   container: {
     TokenService: { verify: mockVerify },
+    UserRepository: { findByEmail: mockFindByEmail },
   },
 }))
 
@@ -40,60 +42,60 @@ describe('authMiddleware', () => {
     vi.clearAllMocks()
   })
 
-  it('should call next with UnauthorizedError when Authorization header is missing', () => {
+  it('should call next with UnauthorizedError when Authorization header is missing', async () => {
     const req = makeReq()
     const res = makeRes()
-    authMiddleware([UserRole.TEACHER])(req as Request, res as Response, next)
+    await authMiddleware([UserRole.TEACHER])(req as Request, res as Response, next)
 
     expect(next).toHaveBeenCalledWith(expect.any(UnauthorizedError))
     expect(res.status).not.toHaveBeenCalled()
   })
 
-  it('should call next with UnauthorizedError when Authorization header does not start with Bearer', () => {
+  it('should call next with UnauthorizedError when Authorization header does not start with Bearer', async () => {
     const req = makeReq('Basic sometoken')
     const res = makeRes()
-    authMiddleware([UserRole.TEACHER])(req as Request, res as Response, next)
+    await authMiddleware([UserRole.TEACHER])(req as Request, res as Response, next)
 
     expect(next).toHaveBeenCalledWith(expect.any(UnauthorizedError))
     expect(res.status).not.toHaveBeenCalled()
   })
 
-  it('should call next with UnauthorizedError when token is invalid', () => {
+  it('should call next with UnauthorizedError when token is invalid', async () => {
     mockVerify.mockImplementation(() => { throw new Error('invalid token') })
     const req = makeReq('Bearer invalidtoken')
     const res = makeRes()
-    authMiddleware([UserRole.TEACHER])(req as Request, res as Response, next)
+    await authMiddleware([UserRole.TEACHER])(req as Request, res as Response, next)
 
     expect(next).toHaveBeenCalledWith(expect.any(UnauthorizedError))
     expect(res.status).not.toHaveBeenCalled()
   })
 
-  it('should call next with ForbiddenError when role is not in the allowed list', () => {
+  it('should call next with ForbiddenError when role is not in the allowed list', async () => {
     mockVerify.mockReturnValue({ ...validPayload, role: UserRole.TEACHER })
     const req = makeReq('Bearer validtoken')
     const res = makeRes()
-    authMiddleware([UserRole.ADMIN])(req as Request, res as Response, next)
+    await authMiddleware([UserRole.ADMIN])(req as Request, res as Response, next)
 
     expect(next).toHaveBeenCalledWith(expect.any(ForbiddenError))
     expect(res.status).not.toHaveBeenCalled()
   })
 
-  it('should call next and set res.locals.user for valid token and allowed role', () => {
+  it('should call next and set res.locals.user for valid token and allowed role', async () => {
     mockVerify.mockReturnValue(validPayload)
     const req = makeReq('Bearer validtoken')
     const res = makeRes()
-    authMiddleware([UserRole.TEACHER])(req as Request, res as Response, next)
+    await authMiddleware([UserRole.TEACHER])(req as Request, res as Response, next)
 
     expect(next).toHaveBeenCalledWith()
     expect(res.locals!.user).toEqual(validPayload)
     expect(res.status).not.toHaveBeenCalled()
   })
 
-  it('should call next when multiple roles are allowed and token role matches one', () => {
+  it('should call next when multiple roles are allowed and token role matches one', async () => {
     mockVerify.mockReturnValue(validPayload)
     const req = makeReq('Bearer validtoken')
     const res = makeRes()
-    authMiddleware([UserRole.ADMIN, UserRole.TEACHER])(req as Request, res as Response, next)
+    await authMiddleware([UserRole.ADMIN, UserRole.TEACHER])(req as Request, res as Response, next)
 
     expect(next).toHaveBeenCalledWith()
   })

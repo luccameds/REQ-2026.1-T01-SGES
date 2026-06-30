@@ -4,7 +4,7 @@ import type { UserRole } from '@/domain'
 import { container } from '@/infra/container/container'
 
 export function authMiddleware(allowedRoles: UserRole[]): RequestHandler {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     const tokenService = container.TokenService
     const authHeader = req.headers.authorization
 
@@ -20,6 +20,13 @@ export function authMiddleware(allowedRoles: UserRole[]): RequestHandler {
 
       if (!allowedRoles.includes(payload.role)) {
         next(new ForbiddenError('Insufficient permissions'))
+        return
+      }
+
+      const userRepository = container.UserRepository
+      const user = await userRepository.findByEmail(payload.email)
+      if (!user) {
+        next(new UnauthorizedError('User session is invalid or inactive'))
         return
       }
 
