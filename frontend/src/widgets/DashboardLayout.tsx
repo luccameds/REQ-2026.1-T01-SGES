@@ -8,9 +8,7 @@ import { notificationsApi, type NotificationDto } from '@/shared/api/notificatio
 import {
   Layers,
   LayoutDashboard,
-  Users,
   ClipboardList,
-  BarChart3,
   BookOpen,
   CalendarCheck,
   LogOut,
@@ -23,6 +21,7 @@ import {
   FileText,
   History,
   Shield,
+  BarChart2,
 } from 'lucide-react';
 
 // --- Nav items per role ---
@@ -39,7 +38,9 @@ const adminNav: NavItem[] = [
   { label: 'Formulários', icon: FileText, to: '/forms', active: true },
   { label: 'Cadastros', icon: ClipboardList, to: '/students', active: true },
   { label: 'Turmas', icon: BookOpen, to: '/classes', active: true },
+  { label: 'Registro de Presença', icon: CalendarCheck, to: '/attendance', active: true },
   { label: 'Instrutores', icon: Shield, to: '/instructors', active: true },
+  { label: 'Relatórios', icon: BarChart2, to: '/reports', active: true },
   { label: 'Histórico', icon: History, to: '/history', active: true },
 ];
 
@@ -300,7 +301,7 @@ export const DashboardLayout: React.FC = () => {
                                   {n.message}
                                 </p>
                                 <p className="text-[9px] text-muted-foreground/60 mt-1">
-                                  {new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                  {new Date(n.createdAt).toLocaleDateString('pt-BR')} às {new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                 </p>
                               </div>
                               {!n.isRead && (

@@ -54,7 +54,7 @@ export class UserTypeormRepository implements UserRepository {
 
   async deleteById(id: string): Promise<void> {
     const repo = this.dataSource.getRepository(UserEntity)
-    await repo.delete({ id })
+    await repo.softDelete({ id })
   }
 
   private toUser(entity: UserEntity): User {

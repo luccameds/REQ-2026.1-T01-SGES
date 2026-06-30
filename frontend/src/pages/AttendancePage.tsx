@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, AlertCircle, Calendar, Users, ClipboardCheck } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Calendar, Users, ClipboardCheck, User, Info } from 'lucide-react';
 import { classesApi, type ClassDto, type AttendanceStatus } from '@/shared/api/classes';
 import type { StudentDto } from '@/shared/api/students';
 
@@ -10,16 +10,38 @@ interface AttendanceState {
   };
 }
 
+const formatDate = (dateStr: string) => {
+  if (!dateStr) return '';
+  const parts = dateStr.split('-');
+  if (parts.length !== 3) return dateStr;
+  const [year, month, day] = parts;
+  return `${day}/${month}/${year}`;
+};
+
+const checkIfExpired = (dateStr: string) => {
+  if (!dateStr) return false;
+  const classDate = new Date(dateStr + 'T12:00:00');
+  const now = new Date();
+  const diff = now.getTime() - classDate.getTime();
+  return diff > 72 * 60 * 60 * 1000;
+};
+
 export const AttendancePage: React.FC = () => {
   const [classes, setClasses] = useState<ClassDto[]>([]);
   const [selectedClassId, setSelectedClassId] = useState('');
   const [students, setStudents] = useState<StudentDto[]>([]);
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [attendances, setAttendances] = useState<AttendanceState>({});
+  const [hasExistingAttendance, setHasExistingAttendance] = useState(false);
+  const [justificativaAlteracao, setJustificativaAlteracao] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+
+  const isToday = date === new Date().toISOString().split('T')[0];
+  const isRetroactive = !isToday || hasExistingAttendance;
+  const isExpired = checkIfExpired(date);
 
   useEffect(() => {
     const loadClasses = async () => {
@@ -37,26 +59,44 @@ export const AttendancePage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!selectedClassId) return;
+    if (!selectedClassId || !date) return;
 
-    const loadStudents = async () => {
+    const loadStudentsAndAttendance = async () => {
+      setLoading(true);
+      setError('');
       try {
-        const data = await classesApi.getStudents(selectedClassId);
-        setStudents(data);
+        const classStudents = await classesApi.getStudents(selectedClassId);
+        setStudents(classStudents);
+
+        const attendanceList = await classesApi.getAttendance(selectedClassId, date);
+        const hasRecords = attendanceList.some((r) => r.status !== null);
+        setHasExistingAttendance(hasRecords);
+
+        // Fetch existing global justification from the first record if any
+        const existingJustification = attendanceList.find((r) => r.justificativaDetalhes !== null)?.justificativaDetalhes || '';
+        setJustificativaAlteracao(existingJustification);
 
         const initial: AttendanceState = {};
-        data.forEach((s) => {
-          initial[s.id] = { status: 'PRESENT', justification: '' };
+        classStudents.forEach((s) => {
+          const record = attendanceList.find((r) => r.studentId === s.id);
+          initial[s.id] = {
+            status: record?.status || 'PRESENT',
+            justification: record?.observacao || '',
+          };
         });
         setAttendances(initial);
       } catch (err) {
-        console.error('Failed to load class students', err);
+        console.error('Failed to load class students and attendance', err);
+        setError('Erro ao carregar os dados dos alunos ou chamada anterior.');
+      } finally {
+        setLoading(false);
       }
     };
-    loadStudents();
-  }, [selectedClassId]);
+    loadStudentsAndAttendance();
+  }, [selectedClassId, date]);
 
   const handleStatusChange = (studentId: string, status: AttendanceStatus) => {
+    if (isExpired) return;
     setAttendances((prev) => ({
       ...prev,
       [studentId]: {
@@ -67,6 +107,7 @@ export const AttendancePage: React.FC = () => {
   };
 
   const handleJustificationChange = (studentId: string, justification: string) => {
+    if (isExpired) return;
     setAttendances((prev) => ({
       ...prev,
       [studentId]: {
@@ -78,7 +119,13 @@ export const AttendancePage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedClassId) return;
+    if (!selectedClassId || isExpired) return;
+
+    if (isRetroactive && !justificativaAlteracao.trim()) {
+      setError('A justificativa da alteração retroativa é obrigatória.');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
 
     setLoading(true);
     setError('');
@@ -91,11 +138,18 @@ export const AttendancePage: React.FC = () => {
         justification: attendances[studentId].justification,
       }));
 
-      await classesApi.saveAttendance(selectedClassId, date, payload);
+      if (isRetroactive) {
+        await classesApi.updateAttendance(selectedClassId, date, justificativaAlteracao, payload);
+      } else {
+        await classesApi.saveAttendance(selectedClassId, date, payload);
+      }
+
       setSuccess(true);
+      setHasExistingAttendance(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (err: any) {
-      setError('Erro ao salvar a chamada de presença.');
+    } catch (err) {
+      const axiosError = err as { response?: { data?: { message?: string } } };
+      setError(axiosError?.response?.data?.message || 'Erro ao salvar a chamada de presença.');
     } finally {
       setLoading(false);
     }
@@ -106,7 +160,7 @@ export const AttendancePage: React.FC = () => {
       <div>
         <h2 className="text-xl font-bold text-foreground">Registro de Presença</h2>
         <p className="text-sm text-muted-foreground mt-1">
-          Selecione a turma e realize o lançamento da chamada diária de presença.
+          Selecione a turma e realize o lançamento ou alteração da chamada diária de presença.
         </p>
       </div>
 
@@ -124,6 +178,13 @@ export const AttendancePage: React.FC = () => {
         </div>
       )}
 
+      {isExpired && (
+        <div className="p-4 bg-amber-500/10 border border-amber-500/20 text-amber-800 rounded-2xl flex items-center gap-3 text-sm">
+          <Info className="w-5 h-5 text-amber-600 flex-shrink-0" />
+          <span>O prazo de 72 horas para alteração ou lançamento desta chamada expirou. Apenas visualização permitida.</span>
+        </div>
+      )}
+
       <div className="p-6 bg-card border border-border/40 rounded-2xl shadow-sm flex flex-col md:flex-row gap-4">
         <div className="flex-1 space-y-1.5">
           <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">
@@ -138,7 +199,7 @@ export const AttendancePage: React.FC = () => {
             >
               {classes.map((c) => (
                 <option key={c.id} value={c.id}>
-                  {c.name} ({c.semester})
+                  {c.nomeCurso} ({c.semester})
                 </option>
               ))}
             </select>
@@ -158,6 +219,9 @@ export const AttendancePage: React.FC = () => {
               className="bg-transparent border-0 outline-none w-full text-sm text-foreground"
             />
           </div>
+          <p className="text-[10px] text-muted-foreground/80 mt-1">
+            Data selecionada: <span className="font-bold text-foreground">{formatDate(date)}</span>
+          </p>
         </div>
       </div>
 
@@ -178,11 +242,9 @@ export const AttendancePage: React.FC = () => {
                   className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center px-6 py-4 hover:bg-muted/5 transition-colors"
                 >
                   <div className="col-span-1 lg:col-span-4 flex items-center gap-3">
-                    <img
-                      src={student.foto_url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150'}
-                      alt={student.name}
-                      className="w-10 h-10 rounded-full object-cover border border-border"
-                    />
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center border border-border text-primary flex-shrink-0">
+                      <User className="w-5 h-5" />
+                    </div>
                     <div className="min-w-0">
                       <h4 className="font-semibold text-foreground text-sm truncate">{student.name}</h4>
                       <p className="text-[10px] text-muted-foreground mt-0.5">{student.codigo_matricula}</p>
@@ -193,36 +255,53 @@ export const AttendancePage: React.FC = () => {
                     <div className="flex p-1 bg-muted rounded-xl gap-1 w-full max-w-xs sm:max-w-none">
                       <button
                         type="button"
+                        disabled={isExpired}
                         onClick={() => handleStatusChange(student.id, 'PRESENT')}
                         className={`flex-1 text-center py-2 rounded-lg text-xs font-bold transition-all ${
                           attendance.status === 'PRESENT'
                             ? 'bg-emerald-500 text-white shadow-sm'
                             : 'text-muted-foreground hover:text-foreground'
-                        }`}
+                        } disabled:opacity-50`}
                       >
                         P
                       </button>
 
                       <button
                         type="button"
+                        disabled={isExpired}
                         onClick={() => handleStatusChange(student.id, 'ABSENT')}
                         className={`flex-1 text-center py-2 rounded-lg text-xs font-bold transition-all ${
                           attendance.status === 'ABSENT'
                             ? 'bg-rose-500 text-white shadow-sm'
                             : 'text-muted-foreground hover:text-foreground'
-                        }`}
+                        } disabled:opacity-50`}
                       >
                         F
                       </button>
 
                       <button
                         type="button"
+                        disabled={isExpired}
+                        onClick={() => handleStatusChange(student.id, 'JUSTIFIED')}
+                        className={`flex-1 text-center py-2 rounded-lg text-xs font-bold transition-all ${
+                          attendance.status === 'JUSTIFIED'
+                            ? 'bg-amber-500 text-white shadow-sm'
+                            : 'text-muted-foreground hover:text-foreground'
+                        } disabled:opacity-50`}
+                        title="Falta Justificada"
+                      >
+                        FJ
+                      </button>
+
+                      <button
+                        type="button"
+                        disabled={isExpired}
                         onClick={() => handleStatusChange(student.id, 'FT')}
                         className={`flex-1 text-center py-2 rounded-lg text-xs font-bold transition-all ${
                           attendance.status === 'FT'
                             ? 'bg-primary text-white shadow-sm'
                             : 'text-muted-foreground hover:text-foreground'
-                        }`}
+                        } disabled:opacity-50`}
                         title="Falta justificável por motivo de trabalho"
                       >
                         FT
@@ -233,15 +312,18 @@ export const AttendancePage: React.FC = () => {
                   <div className="col-span-1 lg:col-span-4">
                     <input
                       type="text"
+                      disabled={isExpired}
                       placeholder={
                         attendance.status === 'FT'
                           ? 'Descreva a justificativa de trabalho...'
+                          : attendance.status === 'JUSTIFIED'
+                          ? 'Descreva a justificativa da falta...'
                           : 'Adicione observações para faltas ou ausências...'
                       }
                       value={attendance.justification}
                       onChange={(e) => handleJustificationChange(student.id, e.target.value)}
-                      required={attendance.status === 'FT'}
-                      className="w-full px-3 py-2 text-xs rounded-xl border border-border bg-muted/10 text-foreground placeholder-muted-foreground outline-none focus:border-primary transition-colors"
+                      required={(attendance.status === 'FT' || attendance.status === 'JUSTIFIED') && !isExpired}
+                      className="w-full px-3 py-2 text-xs rounded-xl border border-border bg-muted/10 text-foreground placeholder-muted-foreground outline-none focus:border-primary transition-colors disabled:opacity-50"
                     />
                   </div>
                 </div>
@@ -256,7 +338,27 @@ export const AttendancePage: React.FC = () => {
           </div>
         </div>
 
-        {students.length > 0 && (
+        {isRetroactive && students.length > 0 && (
+          <div className="p-6 bg-card border border-border/40 rounded-2xl shadow-sm space-y-3">
+            <label className="text-sm font-bold text-foreground block">
+              Justificativa da Alteração Retroativa <span className="text-destructive">*</span>
+            </label>
+            <textarea
+              disabled={isExpired}
+              rows={3}
+              placeholder="Digite detalhadamente a justificativa para auditoria desta chamada..."
+              value={justificativaAlteracao}
+              onChange={(e) => setJustificativaAlteracao(e.target.value)}
+              className="w-full px-4 py-3 text-sm rounded-xl border border-border bg-muted/10 text-foreground placeholder-muted-foreground outline-none focus:border-primary transition-colors disabled:opacity-50"
+              required={!isExpired}
+            />
+            <p className="text-[11px] text-muted-foreground">
+              A alteração retroativa está sujeita a gravação na trilha de auditoria contendo data, autor e valores anteriores.
+            </p>
+          </div>
+        )}
+
+        {students.length > 0 && !isExpired && (
           <div className="flex justify-end">
             <button
               type="submit"

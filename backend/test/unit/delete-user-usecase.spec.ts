@@ -35,13 +35,17 @@ const makeUserRepository = (): UserRepository => ({
 
 describe('DeleteUserUseCase', () => {
   let userRepository: UserRepository
+  let securityLogRepository: any
   let validator: Validator<DeleteUserUseCase.Input>
   let sut: DeleteUserUseCase
 
   beforeEach(() => {
     userRepository = makeUserRepository()
+    securityLogRepository = {
+      save: vi.fn().mockResolvedValue({ id: 'log-id' }),
+    }
     validator = makeValidator()
-    sut = new DeleteUserUseCase(userRepository, validator)
+    sut = new DeleteUserUseCase(userRepository, validator, securityLogRepository)
   })
 
   it('should delete user when id exists', async () => {

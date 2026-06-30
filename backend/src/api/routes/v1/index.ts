@@ -4,6 +4,8 @@ import users from './users'
 import enrollments from './enrollments'
 import attendance from './attendance'
 import classes from './classes'
+import students from './students'
+import reports from './reports'
 
 const router = Router()
 
@@ -12,5 +14,7 @@ router.use('/users', users)
 router.use('/enrollments', enrollments)
 router.use('/attendance', attendance)
 router.use('/classes', classes)
+router.use('/students', students)
+router.use('/reports', reports)
 
 export { router as routes }

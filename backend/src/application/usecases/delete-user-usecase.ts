@@ -2,6 +2,7 @@ import type { Validator } from '@/application/infra/services/shared/validator'
 import { NotFoundError } from '@/application/infra/errors'
 import logger from '@/infra/logger'
 import type { UserRepository } from '../services/user-repository'
+import type { SecurityLogRepository } from '../services/security-log-repository'
 
 export class DeleteUserUseCase {
   public static Name = 'DeleteUserUseCase' as const
@@ -9,6 +10,7 @@ export class DeleteUserUseCase {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly validator: Validator<DeleteUserUseCase.Input>,
+    private readonly securityLogRepository: SecurityLogRepository,
   ) {}
 
   async execute(input: DeleteUserUseCase.Input): Promise<void> {
@@ -23,6 +25,12 @@ export class DeleteUserUseCase {
     }
 
     await this.userRepository.deleteById(validatedInput.id)
+
+    await this.securityLogRepository.save({
+      userId: validatedInput.id,
+      action: 'INACTIVATE_USER',
+      details: `User email: ${user.email}, role: ${user.role}, name: ${user.name}`,
+    })
 
     logger.info({ userId: validatedInput.id, email: user.email }, 'DeleteUser: usuário deletado')
   }
