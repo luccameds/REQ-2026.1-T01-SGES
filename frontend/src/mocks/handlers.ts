@@ -47,7 +47,7 @@ const MOCK_USERS: MockUser[] = [
   },
 ];
 
-let mockNotifications = [
+const mockNotifications = [
   {
     id: 'n1',
     userId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', // Nayla Nobre
@@ -74,14 +74,13 @@ let mockNotifications = [
   },
 ];
 
-let mockStudents = [
+const mockStudents = [
   {
     id: 's1',
     codigo_matricula: 'MAT-000001',
     name: 'João Silva',
     email: 'joao.silva@email.com',
     profissao: 'Carpinteiro',
-    foto_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
     createdAt: new Date().toISOString(),
   },
   {
@@ -90,7 +89,6 @@ let mockStudents = [
     name: 'Maria Santos',
     email: 'maria.santos@email.com',
     profissao: 'Professora',
-    foto_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
     createdAt: new Date().toISOString(),
   },
 ];
@@ -132,12 +130,24 @@ let mockClasses = [
   },
 ];
 
-let mockEnrollments: Record<string, string[]> = {
+const mockEnrollments: Record<string, string[]> = {
   'c1': ['s1', 's2'],
   'c2': ['s2'],
 };
 
-let mockForms = [
+interface MockAttendance {
+  classId: string;
+  studentId: string;
+  date: string; // YYYY-MM-DD
+  status: 'PRESENT' | 'ABSENT' | 'JUSTIFIED' | 'FT';
+  observacao: string | null;
+  justificativaDetalhes: string | null;
+}
+
+let mockAttendances: MockAttendance[] = [];
+
+
+const mockForms = [
   {
     id: 'f1',
     title: 'Pesquisa de Perfil Socioeconômico',
@@ -150,7 +160,7 @@ let mockForms = [
   },
 ];
 
-let mockFormResponses = [
+const mockFormResponses = [
   {
     id: 'r1',
     formId: 'f1',
@@ -164,7 +174,7 @@ let mockFormResponses = [
   },
 ];
 
-let mockHistoryClasses = [
+const mockHistoryClasses = [
   {
     id: 'hc1',
     name: 'Alfabetização Inicial',
@@ -194,7 +204,7 @@ let mockHistoryClasses = [
   },
 ];
 
-let mockHistoryInstructors = [
+const mockHistoryInstructors = [
   {
     id: 'hi1',
     teacherName: 'Maria Silva',
@@ -225,6 +235,19 @@ let currentLoggedUser: MockUser | null = null;
 function delay(ms: number = 400): Promise<void> {
   const jitter = Math.random() * 400; // 0–400ms extra
   return new Promise((resolve) => setTimeout(resolve, ms + jitter));
+}
+
+// Helper to parse query params from config or URL
+function getQueryParam(config: InternalAxiosRequestConfig, name: string): string {
+  if (config.params && config.params[name] !== undefined && config.params[name] !== null) {
+    return String(config.params[name]);
+  }
+  const url = config.url || '';
+  if (url.includes('?')) {
+    const searchParams = new URLSearchParams(url.split('?')[1]);
+    return searchParams.get(name) || '';
+  }
+  return '';
 }
 
 // Create a mock axios error response
@@ -484,7 +507,6 @@ export function setupMockApi(): void {
           name: body.name,
           email: body.email,
           profissao: body.profissao,
-          foto_url: body.foto_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
           createdAt: new Date().toISOString(),
         };
         mockStudents.unshift(newStudent);
@@ -515,7 +537,6 @@ export function setupMockApi(): void {
           name: body.name,
           email: body.email,
           profissao: body.profissao,
-          foto_url: body.foto_url || mockStudents[studentIndex].foto_url,
         };
 
         config.adapter = async () => ({
@@ -574,6 +595,45 @@ export function setupMockApi(): void {
           data: newUser,
           status: 201,
           statusText: 'Created',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
+      // --- PUT /users/:id (Editar Usuário/Instrutor) ---
+      if (url.startsWith('/users/') && method === 'put') {
+        await delay(150);
+        const parts = url.split('/');
+        const userId = parts[2];
+        const body = typeof config.data === 'string' ? JSON.parse(config.data) : config.data;
+
+        const userIndex = MOCK_USERS.findIndex((u) => u.id === userId);
+        if (userIndex === -1) {
+          throw createMockError(404, 'Usuário não encontrado.', config);
+        }
+
+        if (
+          MOCK_USERS.some(
+            (u) => u.id !== userId && u.email.toLowerCase() === body.email.toLowerCase()
+          )
+        ) {
+          throw createMockError(400, 'Já existe outro usuário cadastrado com este e-mail.', config);
+        }
+
+        const updatedUser = {
+          ...MOCK_USERS[userIndex],
+          name: body.name,
+          email: body.email,
+          role: body.role || MOCK_USERS[userIndex].role,
+        };
+
+        MOCK_USERS[userIndex] = updatedUser;
+
+        config.adapter = async () => ({
+          data: updatedUser,
+          status: 200,
+          statusText: 'OK',
           headers: {},
           config,
         });
@@ -797,16 +857,241 @@ export function setupMockApi(): void {
         return config;
       }
 
-      // --- POST /classes/:classId/attendances ---
-      if (url.startsWith('/classes/') && url.endsWith('/attendances') && method === 'post') {
-        await delay(200);
-        const body = typeof config.data === 'string' ? JSON.parse(config.data) : config.data;
-        console.log('[SGES Mock API] Presenças salvas:', body);
+      // --- GET /attendance ---
+      if (url.startsWith('/attendance') && method === 'get') {
+        await delay(150);
+        const classId = getQueryParam(config, 'classId');
+        const date = getQueryParam(config, 'date');
+
+        const studentIds = mockEnrollments[classId] || [];
+        const enrolledStudents = mockStudents.filter((s) => studentIds.includes(s.id));
+
+        const result = enrolledStudents.map((student) => {
+          const attendance = mockAttendances.find(
+            (a) => a.classId === classId && a.studentId === student.id && a.date === date
+          );
+          return {
+            studentId: student.id,
+            studentName: student.name,
+            status: attendance ? attendance.status : null,
+            observacao: attendance ? attendance.observacao : null,
+            justificativaDetalhes: attendance ? attendance.justificativaDetalhes : null,
+          };
+        });
 
         config.adapter = async () => ({
-          data: { success: true, count: body.length },
-          status: 201,
-          statusText: 'Created',
+          data: result,
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
+      // --- POST or PUT /classes/:classId/attendances ---
+      if (url.startsWith('/classes/') && url.endsWith('/attendances') && (method === 'post' || method === 'put')) {
+        await delay(200);
+        const parts = url.split('/');
+        const classId = parts[2];
+        const body = typeof config.data === 'string' ? JSON.parse(config.data) : config.data;
+        const { date, justificativaDetalhes, attendances } = body;
+
+        attendances.forEach((att: { studentId: string; status: string; justification?: string }) => {
+          mockAttendances = mockAttendances.filter(
+            (a) => !(a.classId === classId && a.studentId === att.studentId && a.date === date)
+          );
+
+          mockAttendances.push({
+            classId,
+            studentId: att.studentId,
+            date,
+            status: att.status as 'PRESENT' | 'ABSENT' | 'JUSTIFIED' | 'FT',
+            observacao: att.justification || null,
+            justificativaDetalhes: justificativaDetalhes || null,
+          });
+        });
+
+        config.adapter = async () => ({
+          data: { success: true, count: attendances.length },
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
+      // --- GET /students/:studentId/history ---
+      if (url.startsWith('/students/') && url.endsWith('/history') && method === 'get') {
+        await delay(200);
+        const parts = url.split('/');
+        const studentId = parts[2];
+        const student = mockStudents.find((s) => s.id === studentId) || mockStudents[0];
+
+        // Find classes where student is enrolled
+        const studentClassIds = Object.keys(mockEnrollments).filter((classId) =>
+          mockEnrollments[classId].includes(student.id)
+        );
+
+        const enrollments = studentClassIds.map((classId) => {
+          const c = mockClasses.find((cl) => cl.id === classId);
+          return {
+            classId,
+            className: c ? c.nomeCurso : 'Turma Desconhecida',
+            status: 'ACTIVE',
+            semester: c ? c.semester : '2026.1',
+            createdAt: new Date().toISOString(),
+          };
+        });
+
+        const attendanceStats = studentClassIds.map((classId) => {
+          const c = mockClasses.find((cl) => cl.id === classId);
+          const classAtts = mockAttendances.filter((a) => a.classId === classId && a.studentId === student.id);
+          const totalClasses = classAtts.length;
+          const presenceCount = classAtts.filter((a) => a.status === 'PRESENT').length;
+          const absenceCount = classAtts.filter((a) => a.status === 'ABSENT').length;
+          const justifiedCount = classAtts.filter((a) => a.status === 'JUSTIFIED' || a.status === 'FT').length;
+          const attendanceRate = totalClasses > 0 ? Math.round((presenceCount / totalClasses) * 100) : 100;
+
+          return {
+            classId,
+            className: c ? c.nomeCurso : 'Turma Desconhecida',
+            totalClasses,
+            presenceCount,
+            absenceCount,
+            justifiedCount,
+            attendanceRate,
+          };
+        });
+
+        const attendanceTimeline = mockAttendances
+          .filter((a) => a.studentId === student.id)
+          .map((a) => {
+            const c = mockClasses.find((cl) => cl.id === a.classId);
+            return {
+              date: a.date,
+              className: c ? c.nomeCurso : 'Turma Desconhecida',
+              status: a.status,
+              observacao: a.observacao,
+              justificativaDetalhes: a.justificativaDetalhes,
+            };
+          });
+
+        const evasionAlerts = studentClassIds.map((classId) => {
+          const c = mockClasses.find((cl) => cl.id === classId);
+          const absencesCount = mockAttendances.filter(
+            (a) => a.classId === classId && a.studentId === student.id && a.status === 'ABSENT'
+          ).length;
+
+          return {
+            classId,
+            className: c ? c.nomeCurso : 'Turma Desconhecida',
+            absencesCount,
+            evaded: false,
+          };
+        });
+
+        config.adapter = async () => ({
+          data: {
+            student: {
+              id: student.id,
+              name: student.name,
+              email: student.email,
+              codigoMatricula: student.codigo_matricula,
+              profissao: student.profissao,
+            },
+            enrollments,
+            attendanceStats,
+            attendanceTimeline,
+            evasionAlerts,
+          },
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config,
+        });
+        return config;
+      }
+
+      // --- GET /reports/frequency ---
+      if (url.startsWith('/reports/frequency') && method === 'get') {
+        await delay(150);
+        const classId = getQueryParam(config, 'classId');
+        const format = getQueryParam(config, 'format');
+
+        const classList = classId ? mockClasses.filter((c) => c.id === classId) : mockClasses;
+        const result: {
+          studentId: string;
+          studentName: string;
+          studentEmail: string;
+          codigoMatricula: string;
+          classId: string;
+          className: string;
+          totalClasses: number;
+          presenceCount: number;
+          absenceCount: number;
+          justifiedCount: number;
+          attendanceRate: number;
+        }[] = [];
+
+        classList.forEach((c) => {
+          const studentIds = mockEnrollments[c.id] || [];
+          const enrolledStudents = mockStudents.filter((s) => studentIds.includes(s.id));
+
+          enrolledStudents.forEach((student) => {
+            const classAtts = mockAttendances.filter((a) => a.classId === c.id && a.studentId === student.id);
+            const totalClasses = classAtts.length;
+            const presenceCount = classAtts.filter((a) => a.status === 'PRESENT').length;
+            const absenceCount = classAtts.filter((a) => a.status === 'ABSENT').length;
+            const justifiedCount = classAtts.filter((a) => a.status === 'JUSTIFIED' || a.status === 'FT').length;
+            const attendanceRate = totalClasses > 0 ? Math.round((presenceCount / totalClasses) * 100) : 100;
+
+            const maskString = (s: string) => {
+              if (!s) return '';
+              const parts = s.split(' ');
+              return parts.map(p => p.length > 1 ? p[0] + '*'.repeat(Math.min(p.length - 1, 4)) : p).join(' ');
+            };
+
+            result.push({
+              studentId: student.id,
+              studentName: maskString(student.name),
+              studentEmail: student.email.split('@')[0].substring(0, 2) + '***@' + student.email.split('@')[1],
+              codigoMatricula: student.codigo_matricula,
+              classId: c.id,
+              className: c.nomeCurso,
+              totalClasses,
+              presenceCount,
+              absenceCount,
+              justifiedCount,
+              attendanceRate,
+            });
+          });
+        });
+
+        if (format === 'csv') {
+          let csvContent = '\uFEFF';
+          csvContent += 'Nome do Aluno,E-mail,Código de Matrícula,Turma,Total de Aulas,Presenças,Faltas,Justificativas,Frequência (%)\n';
+          result.forEach((entry) => {
+            csvContent += `"${entry.studentName}","${entry.studentEmail}","${entry.codigoMatricula}","${entry.className}",${entry.totalClasses},${entry.presenceCount},${entry.absenceCount},${entry.justifiedCount},${entry.attendanceRate}\n`;
+          });
+
+          config.adapter = async () => ({
+            data: new Blob([csvContent], { type: 'text/csv;charset=utf-8;' }),
+            status: 200,
+            statusText: 'OK',
+            headers: {
+              'content-type': 'text/csv; charset=utf-8',
+            },
+            config,
+          });
+          return config;
+        }
+
+        config.adapter = async () => ({
+          data: result,
+          status: 200,
+          statusText: 'OK',
           headers: {},
           config,
         });
@@ -816,8 +1101,7 @@ export function setupMockApi(): void {
       // --- GET /reports/funnel ---
       if (url.startsWith('/reports/funnel') && method === 'get') {
         await delay(150);
-        const params = new URLSearchParams(url.split('?')[1] || '');
-        const semester = params.get('semester') || '2026.1';
+        const semester = getQueryParam(config, 'semester') || '2026.1';
 
         const data = semester === '2026.1'
           ? {
