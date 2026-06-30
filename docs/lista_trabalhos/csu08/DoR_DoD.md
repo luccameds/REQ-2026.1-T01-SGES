@@ -15,6 +15,12 @@ Para que o requisito correspondente a este caso de uso seja considerado **Ready*
 - [x] **Entrega de Valor:** O caso de uso agrega valor real ao negócio e está associado a um objetivo do projeto?
 - [x] **Dependências Mapeadas:** Todas as dependências externas e internas foram identificadas e resolvidas?
 
+#### Interface do Usuário (DoR)
+
+![Protótipo - CSU08 - Tela 1](../../images/DoR/CSU08-1.png){: style="border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); max-width: 100%; border: 1px solid var(--sges-card-border); margin-top: 1rem; margin-bottom: 1rem;"}
+
+![Protótipo - CSU08 - Tela 2](../../images/DoR/CSU08-2.png){: style="border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); max-width: 100%; border: 1px solid var(--sges-card-border); margin-top: 1rem;"}
+
 ---
 
 ### 2. Definition of Done (DoD)
