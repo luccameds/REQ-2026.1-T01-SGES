@@ -55,6 +55,15 @@ export class AttendanceTypeormRepository implements AttendanceRepository {
     return entities.map((e) => this.toAttendance(e))
   }
 
+  async findByStudent(studentId: string): Promise<Attendance[]> {
+    const repo = this.dataSource.getRepository(AttendanceEntity)
+    const entities = await repo.find({
+      where: { studentId },
+      order: { date: 'DESC' },
+    })
+    return entities.map((e) => this.toAttendance(e))
+  }
+
   async save(data: Omit<Attendance, keyof BaseDomain>): Promise<Attendance> {
     const repo = this.dataSource.getRepository(AttendanceEntity)
     const existing = await this.findByStudentClassAndDate(data.studentId, data.classId, data.date)

@@ -3,6 +3,8 @@ import { authMiddleware } from '@/api/middleware/auth-middleware'
 import { UserRole, generateStudentMatriculaCode } from '@/domain'
 import { container } from '@/infra/container/container'
 
+import getStudentHistoryRoute from './get-student-history-route'
+
 const router = Router()
 
 function toStudentDto(student: any) {
@@ -50,7 +52,7 @@ router.put('/:id', authMiddleware([UserRole.ADMIN]), async (req, res, next) => {
     const { id } = req.params
     const { name, email, profissao } = req.body
 
-    const existingStudent = await studentRepo.findById(id)
+    const existingStudent = await studentRepo.findById(id as string)
     if (!existingStudent) {
       return res.status(404).json({ message: 'Student not found' })
     }
@@ -68,5 +70,7 @@ router.put('/:id', authMiddleware([UserRole.ADMIN]), async (req, res, next) => {
     next(err)
   }
 })
+
+router.get('/:studentId/history', authMiddleware([UserRole.ADMIN, UserRole.TEACHER]), getStudentHistoryRoute)
 
 export default router

@@ -6,6 +6,7 @@ import listClassStudentsRoute from './list-class-students-route'
 import enrollClassStudentRoute from './enroll-class-student-route'
 import unenrollClassStudentRoute from './unenroll-class-student-route'
 import registerClassAttendanceRoute from './register-class-attendance-route'
+import alterClassAttendanceRoute from './alter-class-attendance-route'
 
 const router = Router({ mergeParams: true })
 
@@ -55,7 +56,7 @@ router.put('/:classId', authMiddleware([UserRole.ADMIN]), async (req, res, next)
     const { classId } = req.params
     const { nomeCurso, livrosEstudados, horario, diaSemana, vagasLimite, instructorIds } = req.body
 
-    const existingClass = await classRepo.findById(classId)
+    const existingClass = await classRepo.findById(classId as string)
     if (!existingClass) {
       return res.status(404).json({ message: 'Class not found' })
     }
@@ -90,7 +91,7 @@ router.delete('/:classId', authMiddleware([UserRole.ADMIN]), async (req, res, ne
   try {
     const classRepo = container.ClassRepository
     const { classId } = req.params
-    await classRepo.deleteById(classId)
+    await classRepo.deleteById(classId as string)
     return res.status(204).send()
   } catch (err) {
     next(err)
@@ -101,5 +102,6 @@ router.get('/:classId/students', authMiddleware([UserRole.ADMIN, UserRole.TEACHE
 router.post('/:classId/students', authMiddleware([UserRole.ADMIN, UserRole.TEACHER]), enrollClassStudentRoute)
 router.delete('/:classId/students/:studentId', authMiddleware([UserRole.ADMIN, UserRole.TEACHER]), unenrollClassStudentRoute)
 router.post('/:classId/attendances', authMiddleware([UserRole.ADMIN, UserRole.TEACHER]), registerClassAttendanceRoute)
+router.put('/:classId/attendances', authMiddleware([UserRole.ADMIN]), alterClassAttendanceRoute)
 
 export default router
