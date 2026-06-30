@@ -61,6 +61,14 @@ export const classesApi = {
     });
   },
 
+  async updateAttendance(classId: string, date: string, justificativaDetalhes: string, attendances: AttendanceInput[]): Promise<void> {
+    await apiClient.put(`/classes/${classId}/attendances`, {
+      date,
+      justificativaDetalhes,
+      attendances,
+    });
+  },
+
   async create(input: {
     nomeCurso: string;
     livrosEstudados?: string | null;
@@ -100,22 +108,27 @@ export const classesApi = {
 
 export const usersApi = {
   async getAll(): Promise<{ users: UserDto[] }> {
-    const { data } = await apiClient.get<any>('/users');
-    const usersList = (data.users || data.data || []).map((u: any) => ({
-      ...u,
-      role: u.role?.toLowerCase() === 'admin' ? 'admin' : 'volunteer',
+    const { data } = await apiClient.get<{ users?: Array<{ id: string; name: string; email: string; role: string }>; data?: Array<{ id: string; name: string; email: string; role: string }> }>('/users');
+    const rawList = data.users || data.data || [];
+    const usersList = rawList.map((u) => ({
+      id: u.id,
+      name: u.name,
+      email: u.email,
+      role: (u.role?.toLowerCase() === 'admin' ? 'admin' : 'volunteer') as 'admin' | 'volunteer',
     }));
     return { users: usersList };
   },
 
   async create(input: { name: string; email: string; role: 'admin' | 'volunteer' }): Promise<UserDto> {
     const backendRole = input.role === 'admin' ? 'ADMIN' : 'TEACHER';
-    const { data } = await apiClient.post<any>('/users', {
+    const { data } = await apiClient.post<{ id: string; name: string; email: string; role: string }>('/users', {
       ...input,
       role: backendRole,
     });
     return {
-      ...data,
+      id: data.id,
+      name: data.name,
+      email: data.email,
       role: data.role?.toLowerCase() === 'admin' ? 'admin' : 'volunteer',
     };
   },
