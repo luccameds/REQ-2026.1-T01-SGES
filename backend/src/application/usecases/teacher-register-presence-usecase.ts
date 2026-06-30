@@ -1,5 +1,7 @@
 import { AttendanceStatus, EnrollmentStatus } from '@/domain'
 import type { Attendance } from '@/domain'
+import { AppError, NotFoundError } from '@/application/infra/errors'
+import type { Validator } from '@/application/infra/services/shared/validator'
 import type { AttendanceRepository } from '../services/attendance-repository'
 import type { EnrollmentRepository } from '../services/enrollment-repository'
 import type { ClassRepository } from '../services/class-repository'
@@ -11,7 +13,7 @@ import type { IEmailService } from '../services/email-service'
 export type RegisterPresenceInput = {
   classId: string
   date: Date
-  alertThreshold?: number // limite configurável (padrão 2, mas pode ser 1)
+  alertThreshold?: number
   attendances: Array<{
     studentId: string
     status: AttendanceStatus
@@ -28,54 +30,52 @@ export class TeacherRegisterPresenceUseCase {
     private readonly attendanceRepository: AttendanceRepository,
     private readonly userRepository: UserRepository,
     private readonly notificationRepository: NotificationRepository,
-    private readonly emailService: IEmailService
+    private readonly emailService: IEmailService,
+    private readonly validator: Validator<RegisterPresenceInput>
   ) {}
 
   async execute(input: RegisterPresenceInput): Promise<Attendance[]> {
-    const classRoom = await this.classRepository.findById(input.classId)
+    const validatedInput = await this.validator.validate(input)
+
+    const classRoom = await this.classRepository.findById(validatedInput.classId)
     if (!classRoom) {
-      throw new Error('Class not found')
+      throw new NotFoundError('Class not found')
     }
 
     const savedRecords: Attendance[] = []
-    const threshold = input.alertThreshold ?? 2
+    const threshold = validatedInput.alertThreshold ?? 2
 
-    for (const record of input.attendances) {
+    for (const record of validatedInput.attendances) {
       const student = await this.studentRepository.findById(record.studentId)
       if (!student) {
-        throw new Error(`Student with ID ${record.studentId} not found`)
+        throw new NotFoundError(`Student with ID ${record.studentId} not found`)
       }
 
-      // Validar se o estudante está matriculado na turma
-      const enrollment = await this.enrollmentRepository.findByStudentAndClass(record.studentId, input.classId)
+      const enrollment = await this.enrollmentRepository.findByStudentAndClass(record.studentId, validatedInput.classId)
       if (!enrollment) {
-        throw new Error(`Student ${student.name} is not enrolled in class ${classRoom.nomeCurso}`)
+        throw new AppError(422, `Student ${student.name} is not enrolled in class ${classRoom.nomeCurso}`)
       }
 
-      // Salvar ou atualizar o registro de presença no banco
       const saved = await this.attendanceRepository.save({
-        classId: input.classId,
+        classId: validatedInput.classId,
         studentId: record.studentId,
-        date: input.date,
+        date: validatedInput.date,
         status: record.status,
         observacao: record.observacao || null,
         justificativaDetalhes: record.justificativaDetalhes || null,
       })
       savedRecords.push(saved)
 
-      // O status de Falta Trabalho (FT) e Justificada não contam como falta não justificada (ABSENT)
       if (record.status === AttendanceStatus.ABSENT) {
-        const studentAttendances = await this.attendanceRepository.findStudentAttendances(record.studentId, input.classId)
+        const studentAttendances = await this.attendanceRepository.findStudentAttendances(record.studentId, validatedInput.classId)
         const absencesCount = studentAttendances.filter((a) => a.status === AttendanceStatus.ABSENT).length
 
         const admins = await this.userRepository.findAdmins()
         const instructors = classRoom.instructors || []
 
         if (absencesCount >= 3) {
-          // Desistência automática por excesso de faltas
           await this.enrollmentRepository.updateStatus(enrollment.id, EnrollmentStatus.EVADED)
 
-          // Email automático para o aluno
           if (student.email) {
             await this.emailService.sendAbsenceAlert(student.email, {
               studentName: student.name,
@@ -85,7 +85,6 @@ export class TeacherRegisterPresenceUseCase {
             }).catch(() => {})
           }
 
-          // Criar Alertas no Sistema e Emails para Instrutores e Gestores
           const title = 'Estudante Evadido por Faltas'
           const message = `O estudante ${student.name} atingiu o limite de ${absencesCount} faltas no curso ${classRoom.nomeCurso} e foi marcado como evadido.`
 
@@ -125,7 +124,6 @@ export class TeacherRegisterPresenceUseCase {
             }
           }
         } else if (absencesCount === threshold) {
-          // Email automático de aviso para o aluno
           if (student.email) {
             await this.emailService.sendAbsenceAlert(student.email, {
               studentName: student.name,
@@ -135,7 +133,6 @@ export class TeacherRegisterPresenceUseCase {
             }).catch(() => {})
           }
 
-          // Criar Alertas no Sistema e Emails para Instrutores e Gestores
           const title = 'Alerta de Limite de Faltas Próximo'
           const message = `O estudante ${student.name} atingiu ${absencesCount} faltas no curso ${classRoom.nomeCurso}. O limite máximo é de 3 faltas.`
 

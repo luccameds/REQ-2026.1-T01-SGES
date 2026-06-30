@@ -16,9 +16,18 @@ export class EnrollmentTypeormRepository implements EnrollmentRepository {
 
   async findByStudentAndClass(studentId: string, classId: string): Promise<Enrollment | null> {
     const repo = this.dataSource.getRepository(EnrollmentEntity)
-    const entity = await repo.findOne({ where: { studentId, classId } })
+    const entity = await repo.findOne({ where: { studentId, classId, status: EnrollmentStatus.ACTIVE } })
     if (!entity) return null
     return this.toEnrollment(entity)
+  }
+
+  async findActiveByClass(classId: string): Promise<Enrollment[]> {
+    const repo = this.dataSource.getRepository(EnrollmentEntity)
+    const entities = await repo.find({
+      where: { classId, status: EnrollmentStatus.ACTIVE },
+      order: { createdAt: 'ASC' },
+    })
+    return entities.map((e) => this.toEnrollment(e))
   }
 
   async countActiveEnrollmentsByClass(classId: string): Promise<number> {
