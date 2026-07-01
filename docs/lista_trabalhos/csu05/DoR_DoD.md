@@ -29,8 +29,8 @@ Para que este caso de uso seja considerado **Done** (Concluído) e sua entrega s
 #### 2.1. Entrega de Valor
 - [x] O trabalho realizado entrega um incremento funcional e observável no produto de software?
 - [x] A entrega está devidamente rastreada e referenciada ao caso de uso `CSU05` no sistema de controle de versão (ex: nos commits/PRs)?
-    * **Pull Request:** #51 (feat(frontend): adicionar gerenciamento e cadastro de instrutores) e PR #71 (edição de perfil)
-    * **Commits principais:** `b9ed321`, `232c72e`, `a08f657`, `7dbfdae`
+    * **Pull Request:** [#51](https://github.com/mdsreq-fga-unb/REQ-2026.1-T01-SGES/pull/51) (feat(frontend): adicionar gerenciamento e cadastro de instrutores) e [#71](https://github.com/mdsreq-fga-unb/REQ-2026.1-T01-SGES/pull/71) (edição de perfil)
+    * **Commits principais:** [`b9ed321`](https://github.com/mdsreq-fga-unb/REQ-2026.1-T01-SGES/commit/b9ed321), [`232c72e`](https://github.com/mdsreq-fga-unb/REQ-2026.1-T01-SGES/commit/232c72e), [`a08f657`](https://github.com/mdsreq-fga-unb/REQ-2026.1-T01-SGES/commit/a08f657), [`7dbfdae`](https://github.com/mdsreq-fga-unb/REQ-2026.1-T01-SGES/commit/7dbfdae)
 
 #### 2.2. Cobertura dos Requisitos
 - [x] Todos os cenários descritos nos critérios de aceitação (fluxo básico, alternativos e exceções) foram implementados e testados?

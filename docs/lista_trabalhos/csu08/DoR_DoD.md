@@ -29,8 +29,8 @@ Para que este caso de uso seja considerado **Done** (Concluído) e sua entrega s
 #### 2.1. Entrega de Valor
 - [x] O trabalho realizado entrega um incremento funcional e observável no produto de software?
 - [x] A entrega está devidamente rastreada e referenciada ao caso de uso `CSU08` no sistema de controle de versão (ex: nos commits/PRs)?
-    * **Pull Request:** #69 (feat: matriculas)
-    * **Commits principais:** `7d80394`, `22d3748`
+    * **Pull Request:** [#69](https://github.com/mdsreq-fga-unb/REQ-2026.1-T01-SGES/pull/69) (feat: matriculas)
+    * **Commits principais:** [`7d80394`](https://github.com/mdsreq-fga-unb/REQ-2026.1-T01-SGES/commit/7d80394), [`22d3748`](https://github.com/mdsreq-fga-unb/REQ-2026.1-T01-SGES/commit/22d3748)
 
 #### 2.2. Cobertura dos Requisitos
 - [x] Todos os cenários descritos nos critérios de aceitação (fluxo básico, alternativos e exceções) foram implementados e testados?
