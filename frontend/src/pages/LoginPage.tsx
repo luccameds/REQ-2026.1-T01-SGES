@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/app/providers/AuthProvider';
 import { useToast } from '@/shared/components/Toast';
-import { Layers, Mail, Lock, LogIn, Loader2 } from 'lucide-react';
+import { Mail, Lock, LogIn, Loader2 } from 'lucide-react';
 import type { AxiosError } from 'axios';
 
 export const LoginPage: React.FC = () => {
@@ -65,10 +65,8 @@ export const LoginPage: React.FC = () => {
       <div className="w-full max-w-md">
         {/* Logo / Brand */}
         <div className="flex flex-col items-center mb-8">
-          <div className="p-4 bg-primary/10 rounded-2xl mb-4">
-            <Layers className="w-10 h-10 text-primary" />
-          </div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">SGES</h1>
+          <img src="/logo.png" className="w-16 h-16 rounded-2xl shadow-md mb-4" alt="Auta de Sousa" />
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">Auta de Sousa</h1>
           <p className="text-sm text-muted-foreground mt-1">Sistema de Gestão de Impacto Social</p>
         </div>
 

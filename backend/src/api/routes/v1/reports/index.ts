@@ -11,7 +11,7 @@ router.get('/frequency', authMiddleware([UserRole.ADMIN]), async (req, res, next
     const format = req.query.format as string | undefined
 
     const usecase = container.GetFrequencyReportUsecase
-    const data = await usecase.execute({ classId, mask: true })
+    const data = await usecase.execute({ classId, mask: false })
 
     if (format === 'csv') {
       let csvContent = '\uFEFF' // UTF-8 BOM
