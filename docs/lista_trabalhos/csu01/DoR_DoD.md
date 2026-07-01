@@ -27,6 +27,8 @@ Para que este caso de uso seja considerado **Done** (Concluído) e sua entrega s
 #### 2.1. Entrega de Valor
 - [x] O trabalho realizado entrega um incremento funcional e observável no produto de software?
 - [x] A entrega está devidamente rastreada e referenciada ao caso de uso `CSU01` no sistema de controle de versão (ex: nos commits/PRs)?
+    * **Pull Request:** #32 (feat: implementa fluxo de autenticação e dashboard base (FSD))
+    * **Commits principais:** `43796d5`, `182d96e`
 
 #### 2.2. Cobertura dos Requisitos
 - [x] Todos os cenários descritos nos critérios de aceitação (fluxo básico, alternativos e exceções) foram implementados e testados?
