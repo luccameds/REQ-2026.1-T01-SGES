@@ -13,12 +13,12 @@ Permitir o cadastro de novos instrutores vinculando obrigatoriamente um perfil d
 ---
 
 ### 2. Fluxo Básico de Eventos
-1. O Gestor acessa o painel de administração e seleciona 'Cadastrar Instrutor'.
+1. O Gestor acessa o painel de administração e seleciona 'Cadastrar Instrutor'. [[FE-1-A](#fe-1-a-permissao-insuficiente)]
 2. O sistema exibe o formulário de cadastro solicitando: Foto de identificação, Nome Completo, CPF, E-mail, Telefone, Endereço, Profissão, Perfil de Acesso, Contato de Emergência (Nome e Telefone) e Atividades de semestres anteriores.
 3. O Gestor preenche as informações e seleciona o perfil de acesso apropriado.
 4. O Gestor clica em 'Salvar'.
-5. O sistema valida a unicidade do CPF e do E-mail, além de garantir o preenchimento de todos os dados obrigatórios. [[FE-5-A](#fe-5-a-campos-obrigatorios-ausentes), [FE-5-B](#fe-5-b-e-mail-ja-cadastrado), [FE-5-C](#fe-5-c-cpf-ja-cadastrado)]
-6. O sistema salva o instrutor, gera um identificador único (ID) para ele e o envia à base de dados.
+5. O sistema valida a unicidade do CPF e do E-mail, além de garantir o preenchimento de todos os dados obrigatórios. [[FE-5-A](#fe-5-a-campos-obrigatorios-ausentes), [FE-5-B](#fe-5-b-e-mail-ja-cadastrado), [FE-5-C](#fe-5-c-cpf-ja-cadastrado), [FE-5-D](#fe-5-d-dados-invalidos)]
+6. O sistema salva o instrutor, gera um identificador único (ID) para ele e o envia à base de dados. [[FE-6-A](#fe-6-a-falha-de-persistencia)]
 7. O sistema exibe uma mensagem confirmando o cadastro com sucesso.
 
 ---
@@ -29,6 +29,9 @@ Não há fluxos alternativos identificados.
 ---
 
 ### 4. Fluxos de Exceção
+#### FE-1-A - Permissão Insuficiente
+No passo 1, se o usuário logado não possuir perfil de administrador, o sistema impede a abertura do formulário, exibe uma mensagem de acesso negado e redireciona o usuário.
+
 #### FE-5-A - Campos Obrigatórios Ausentes
 No passo 5, se algum campo obrigatório estiver em branco, o sistema impede a gravação, exibe uma mensagem de alerta e destaca os campos que precisam ser preenchidos.
 
@@ -37,6 +40,12 @@ No passo 5, se o e-mail informado já constar na base de dados de outro instruto
 
 #### FE-5-C - CPF já Cadastrado
 No passo 5, se o CPF informado já constar na base de dados de outro instrutor, o sistema bloqueia a gravação e apresenta um alerta informando a duplicidade do CPF.
+
+#### FE-5-D - Dados Inválidos
+No passo 5, se o formato do e-mail ou do CPF for inválido, o sistema bloqueia a gravação, exibe alertas específicos de formatação e solicita a correção.
+
+#### FE-6-A - Falha de Persistência
+No passo 6, se ocorrer uma falha de conexão com a base de dados ou um erro no servidor ao salvar o registro, o sistema bloqueia a ação, exibe um alerta de falha de persistência e mantém os dados no formulário para nova tentativa.
 
 ---
 

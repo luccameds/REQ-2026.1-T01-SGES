@@ -16,7 +16,7 @@ Invalidar o token JWT do usuário ativo, finalizando de forma segura a sua sess�
 1. O usuário clica na opção 'Sair' ou 'Logout' no menu do sistema. [[FE-1-A](#fe-1-a-sessao-expirada-por-inatividade)]
 2. O sistema recebe a requisição de finalização de sessão.
 3. O sistema remove o token JWT armazenado localmente no navegador (LocalStorage/Cookies).
-4. O sistema invalida o token no servidor, se aplicável, e encerra a sessão ativa do usuário.
+4. O sistema invalida o token no servidor, se aplicável, e encerra a sessão ativa do usuário. [[FE-4-A](#fe-4-a-falha-de-persistencia)]
 5. O sistema redireciona o usuário para a tela de login do SGES.
 
 ---
@@ -29,6 +29,9 @@ Não há fluxos alternativos identificados.
 ### 4. Fluxos de Exceção
 #### FE-1-A - Sessão Expirada por Inatividade
 Se o token JWT expirar no navegador por inatividade (após 15 minutos), o sistema realiza o fluxo de logout automaticamente, limpando os dados locais e exigindo nova autenticação no próximo clique do usuário.
+
+#### FE-4-A - Falha de Persistência
+No passo 4, se houver falha de rede ou de comunicação com o servidor ao invalidar a sessão no backend, o sistema mesmo assim remove os dados locais do navegador (localStorage/cookies) e redireciona o usuário para a página de login para garantir a segurança no cliente.
 
 ---
 
