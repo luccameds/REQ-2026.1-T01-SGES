@@ -16,7 +16,7 @@ Validar as credenciais para o controle de acesso primário ao sistema, bloqueand
 1. O usuário acessa a página de login do SGES.
 2. O sistema solicita o e-mail e a senha do usuário.
 3. O usuário insere suas credenciais e clica em 'Entrar'.
-4. O sistema valida as credenciais informadas no banco de dados. [[FE-4-A](#fe-4-a-e-mail-invalido), [FE-4-B](#fe-4-b-senha-invalida), [FE-4-C](#fe-4-c-bloqueio-de-conta)]
+4. O sistema valida as credenciais informadas no banco de dados. [[FE-4-A](#fe-4-a-e-mail-invalido), [FE-4-B](#fe-4-b-senha-invalida), [FE-4-C](#fe-4-c-bloqueio-de-conta), [FE-4-D](#fe-4-d-dados-invalidos), [FE-4-E](#fe-4-e-permissao-insuficiente), [FE-4-F](#fe-4-f-falha-de-persistencia)]
 5. O sistema gera um token JWT válido e inicia a sessão do usuário.
 6. O sistema redireciona o usuário para a página inicial (Dashboard) correspondente ao seu perfil de acesso.
 
@@ -36,6 +36,15 @@ No passo 4, se a senha informada estiver incorreta, o sistema incrementa o conta
 
 #### FE-4-C - Bloqueio de Conta
 No passo 4, se o número de tentativas consecutivas falhas atingir 5, o sistema altera o status da conta para 'Bloqueada', registra a ocorrência na trilha de auditoria (segurança) e exibe uma mensagem informando que a conta foi temporariamente bloqueada por segurança.
+
+#### FE-4-D - Dados Inválidos
+No passo 4, se o e-mail estiver em formato inválido ou se os campos de credenciais estiverem vazios, o sistema impede a autenticação, exibe mensagens de erro de validação correspondentes e solicita a correção.
+
+#### FE-4-E - Permissão Insuficiente
+No passo 4, se a conta do usuário estiver inativa ou se ele não possuir um perfil com permissões ativas e válidas para o sistema, o acesso é bloqueado e o sistema exibe uma mensagem de erro de permissão insuficiente.
+
+#### FE-4-F - Falha de Persistência
+No passo 4, se houver uma falha de conexão com a base de dados ou um erro interno no servidor, o sistema exibe uma mensagem informando a indisponibilidade momentânea do serviço e orienta a tentar novamente.
 
 ---
 

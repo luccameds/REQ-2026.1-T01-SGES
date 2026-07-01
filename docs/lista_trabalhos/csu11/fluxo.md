@@ -13,22 +13,33 @@ Lançar e registrar o abono de ausências de beneficiários no diário de classe
 ---
 
 ### 2. Fluxo Básico de Eventos
-1. O Instrutor seleciona o beneficiário que faltou a uma aula específica.
-2. O Instrutor seleciona a opção 'Registrar Justificativa de Falta'.
+1. O Instrutor seleciona o beneficiário que faltou a uma aula específica. [[FE-1-A](#fe-1-a-beneficiario-inexistente), [FE-1-B](#fe-1-b-permissao-insuficiente)]
+2. O Instrutor seleciona a opção 'Registrar Justificativa de Falta'. [[FA-2-A](#fa-2-a-historico-de-faltas-vazio)]
 3. O sistema solicita o motivo da justificativa e a anexação de um comprovante (ex: atestado médico, declaração escolar).
-4. O Instrutor preenche a justificativa, anexa o documento correspondente e clica em 'Salvar'.
-5. O sistema altera o status da falta daquele dia de 'Não Justificada' para 'Justificada'.
+4. O Instrutor preenche a justificativa, anexa o documento correspondente e clica em 'Salvar'. [[FE-4-A](#fe-4-a-dados-invalidos-ou-anexo-excedido)]
+5. O sistema altera o status da falta daquele dia de 'Não Justificada' para 'Justificada'. [[FE-5-A](#fe-5-a-falha-de-persistencia)]
 6. O sistema armazena o anexo e exibe uma mensagem de confirmação de sucesso.
 
 ---
 
 ### 3. Fluxos Alternativos
-Não há fluxos alternativos identificados.
+#### FA-2-A - Histórico de Faltas Vazio
+No passo 2, se o beneficiário selecionado não possuir nenhuma falta registrada na data ou turma correspondente, o sistema exibe um aviso de histórico vazio ("Este beneficiário não possui faltas a serem justificadas").
 
 ---
 
 ### 4. Fluxos de Exceção
-Não há fluxos de exceção identificados.
+#### FE-1-A - Beneficiário Inexistente
+No passo 1, se o beneficiário ou a aula especificada não existirem no sistema (ex: por remoção simultânea), o sistema cancela a ação e exibe erro correspondente.
+
+#### FE-1-B - Permissão Insuficiente
+No passo 1, se o usuário logado não for o instrutor responsável pela turma ou um gestor autorizado, o sistema bloqueia o registro de justificativas.
+
+#### FE-4-A - Dados Inválidos ou Anexo Excedido
+No passo 4, se o comprovante anexado possuir tamanho superior a 5MB, extensão diferente de PDF, JPG ou PNG, ou se o motivo estiver vazio, o sistema exibe mensagens de erro específicas e impede o salvamento.
+
+#### FE-5-A - Falha de Persistência
+No passo 5, se houver erro ao efetuar o upload do comprovante ou ao persistir a alteração de status no banco de dados, o sistema impede a gravação, exibe erro de persistência e mantém o formulário aberto.
 
 ---
 
