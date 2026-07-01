@@ -34,6 +34,16 @@ Para que este caso de uso seja considerado **Done** (Concluído) e sua entrega s
 
 #### 2.3. Qualidade de Testes
 - [ ] Foram implementados testes unitários para cobrir as regras de negócio deste caso de uso?
+    * **Comando para execução dos testes:**
+      ```bash
+      # No diretório /backend:
+      ./run-tests.sh test/unit/delete-user-usecase.spec.ts
+
+      # No diretório /frontend:
+      npx vitest run src/shared/api/instructors.spec.ts
+      ```
+    * **Evidência de Execução:**
+      *(Insira o print da execução do comando aqui)*
 - [ ] Os fluxos principais foram validados manualmente em ambiente de testes pela equipe ou QA?
 
 #### 2.4. Revisão por Pares (Code Review)
