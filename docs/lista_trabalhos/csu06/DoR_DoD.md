@@ -33,7 +33,7 @@ Para que este caso de uso seja considerado **Done** (Concluído) e sua entrega s
 - [ ] O comportamento do sistema em situações normais e de falha foi validado?
 
 #### 2.3. Qualidade de Testes
-- [ ] Foram implementados testes unitários para cobrir as regras de negócio deste caso de uso?
+- [x] Foram implementados testes unitários para cobrir as regras de negócio deste caso de uso?
     * **Comando para execução dos testes:**
       ```bash
       # No diretório /backend:
@@ -43,7 +43,7 @@ Para que este caso de uso seja considerado **Done** (Concluído) e sua entrega s
       npx vitest run src/shared/api/students.spec.ts
       ```
     * **Evidência de Execução:**
-      *(Insira o print da execução do comando aqui)*
+      ![Evidência de Execução](evidencia.png)
 - [ ] Os fluxos principais foram validados manualmente em ambiente de testes pela equipe ou QA?
 
 #### 2.4. Revisão por Pares (Code Review)
