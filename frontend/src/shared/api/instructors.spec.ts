@@ -39,7 +39,10 @@ describe('Instructors/Users API Client', () => {
 
     const result = await usersApi.create(input);
 
-    expect(apiClient.post).toHaveBeenCalledWith('/users', input);
+    expect(apiClient.post).toHaveBeenCalledWith('/users', {
+      ...input,
+      role: 'TEACHER',
+    });
     expect(result).toEqual(mockUser);
   });
 

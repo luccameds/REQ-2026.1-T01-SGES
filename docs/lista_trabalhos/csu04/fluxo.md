@@ -34,23 +34,18 @@ Não há fluxos alternativos identificados.
 
 ### Fluxos de exceção:
 #### FE-1-A — Permissão Insuficiente
-
 Este fluxo inicia no passo 1 do fluxo principal. Se o usuário autenticado não possuir o perfil de Gestor/Administrador, o sistema bloqueia o acesso, impede a operação e exibe uma mensagem de acesso negado. O caso de uso é encerrado.
 
 #### FE-5-A — Campos Obrigatórios Ausentes
-
 Este fluxo inicia no passo 5 do fluxo principal. Se algum campo obrigatório estiver em branco, o sistema impede a gravação, exibe uma mensagem de alerta e destaca os campos que precisam ser preenchidos. O fluxo retorna ao passo 3 do fluxo principal.
 
 #### FE-5-B — E-mail já Cadastrado
-
 Este fluxo inicia no passo 5 do fluxo principal. Se o e-mail informado já constar na base de dados de outro instrutor, o sistema bloqueia a gravação e apresenta um alerta informando a duplicidade do e-mail. O fluxo retorna ao passo 3 do fluxo principal.
 
 #### FE-5-C — Dados Inválidos
-
 Este fluxo inicia no passo 5 do fluxo principal. Se algum dado fornecido estiver em formato incorreto (ex: e-mail inválido), o sistema impede a gravação e solicita a correção. O fluxo retorna ao passo 3 do fluxo principal.
 
 #### FE-6-A — Falha de Persistência
-
 Este fluxo inicia no passo 6 do fluxo principal. Se ocorrer uma falha ao tentar salvar o instrutor no banco de dados, o sistema aborta a transação, exibe uma mensagem de erro e não altera o estado do sistema. O caso de uso é encerrado.
 
 ### Regras de negócio:
