@@ -1,62 +1,41 @@
 # SGES
-## Especificação de Caso de Uso: CSU03 (RF03) - Encerrar sessão
+## CSU03 (RF03) — Encerrar sessão
 
 [Matriz de Priorização](../../matriz_de_acao_e_priorizacao.md) <br>
 [Andamento](../andamento.md) <br>
-[Cronograma e Planejamento](../../cronograma_e_entregas.md#tabela-de-cronograma-e-planejamento)
+[Cronograma e Planejamento](../../planejamento_organizacao/cronograma_e_entregas.md#tabela-de-cronograma-e-planejamento)
+
 
 ---
 
-### 1. Breve Descrição
-Invalidar o token JWT do usuário ativo, finalizando de forma segura a sua sessão no navegador para impedir acessos não autorizados subsequentes.
+### Objetivo:
+Encerrar de forma segura a sessão ativa do usuário para impedir acessos não autorizados subsequentes.
 
----
+### Ator principal:
+Usuário
 
-### 2. Fluxo Básico de Eventos
-1. O usuário clica na opção 'Sair' ou 'Logout' no menu do sistema. [[FE-1-A](#fe-1-a-sessao-expirada-por-inatividade)]
-2. O sistema recebe a requisição de finalização de sessão.
-3. O sistema remove o token JWT armazenado localmente no navegador (LocalStorage/Cookies).
-4. O sistema invalida o token no servidor, se aplicável, e encerra a sessão ativa do usuário. [[FE-4-A](#fe-4-a-falha-de-persistencia)]
-5. O sistema redireciona o usuário para a tela de login do SGES.
+### Atores secundários:
+Nenhum
 
----
+### Pré-condições:
+O usuário deve estar devidamente autenticado e possuir uma sessão ativa.
 
-### 3. Fluxos Alternativos
-Não há fluxos alternativos identificados.
+### Fluxo principal:
+1. O usuário solicita o encerramento da sessão. (FA-1-A)
+2. O sistema invalida a sessão ativa do usuário e remove as informações de autenticação do dispositivo de acesso. (FE-2-A)
+3. O sistema redireciona o usuário para a tela de login do SGES.
 
----
+### Fluxos alternativos:
+#### FA-1-A — Encerramento por Inatividade
+Este fluxo inicia antes do passo 1 do fluxo principal, quando o sistema detecta 15 minutos consecutivos de inatividade do usuário a sessão ativa é invalidada automaticamente e redireciona o usuário para a interface de login, exibindo um alerta informando que a sessão expirou. (RNF06)
 
-### 4. Fluxos de Exceção
-#### FE-1-A - Sessão Expirada por Inatividade
-Se o token JWT expirar no navegador por inatividade (após 15 minutos), o sistema realiza o fluxo de logout automaticamente, limpando os dados locais e exigindo nova autenticação no próximo clique do usuário.
+### Fluxos de exceção:
+#### FE-2-A — Falha de Comunicação / Persistência
+Este fluxo inicia no passo 2 do fluxo principal. Se ocorrer uma falha ao tentar se comunicar com o servidor para registrar a requisição de logout, as credenciais e dados locais são removidos de qualquer forma para garantir a segurança do terminal local. O caso de uso é encerrado.
 
-#### FE-4-A - Falha de Persistência
-No passo 4, se houver falha de rede ou de comunicação com o servidor ao invalidar a sessão no backend, o sistema mesmo assim remove os dados locais do navegador (localStorage/cookies) e redireciona o usuário para a página de login para garantir a segurança no cliente.
+### Requisitos não funcionais:
+#### RNF06 — Prevenção de Inatividade
+A sessão do usuário deve expirar automaticamente após 15 minutos de inatividade, exigindo novo login.
 
----
-
-### 5. Pré-Condições
-* O usuário deve estar devidamente autenticado e possuir uma sessão ativa.
-
----
-
-### 6. Pós-Condições
-* O token de acesso é invalidado e requisições subsequentes com este token retornam erro de não autorizado (HTTP 401).
-
----
-
-### 7. Pontos de Extensão
-Nenhum ponto de extensão identificado.
-
----
-
-### 8. Requisitos Especiais
-* Garantir a limpeza completa de dados sensíveis da sessão do cliente na memória do navegador.
-
----
-
-### 9. Informações Adicionais
-
-#### Protótipo de Tela (DoR)
-
-![Protótipo - CSU03](CSU03.png){: style="border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); max-width: 100%; border: 1px solid var(--sges-card-border); margin-top: 1rem;"}
+### Pós-condições:
+A sessão de acesso é invalidada e requisições subsequentes com as credenciais antigas retornam erro de não autorizado (HTTP 401).
