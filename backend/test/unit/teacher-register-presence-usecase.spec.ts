@@ -1,6 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { TeacherRegisterPresenceUseCase } from '@/application/usecases/teacher-register-presence-usecase'
 import { AttendanceStatus, EnrollmentStatus, UserRole } from '@/domain'
+import type { Validator } from '@/application/infra/services/shared/validator'
+import type { RegisterPresenceInput } from '@/application/usecases/teacher-register-presence-usecase'
 import type { ClassRepository } from '@/application/services/class-repository'
 import type { StudentRepository } from '@/application/services/student-repository'
 import type { EnrollmentRepository } from '@/application/services/enrollment-repository'
@@ -29,7 +31,6 @@ const makeStudent = () => ({
   email: 'student@test.com',
   codigo_matricula: '12345678',
   profissao: 'Estudante',
-  fotoUrl: null,
 })
 
 const makeEnrollment = () => ({
@@ -37,6 +38,10 @@ const makeEnrollment = () => ({
   studentId: STUDENT_ID,
   classId: CLASS_ID,
   status: EnrollmentStatus.ACTIVE,
+})
+
+const makeValidator = (): Validator<RegisterPresenceInput> => ({
+  validate: vi.fn().mockImplementation(async (input) => input),
 })
 
 describe('TeacherRegisterPresenceUseCase', () => {
@@ -47,6 +52,7 @@ describe('TeacherRegisterPresenceUseCase', () => {
   let userRepository: UserRepository
   let notificationRepository: NotificationRepository
   let emailService: IEmailService
+  let validator: Validator<RegisterPresenceInput>
   let sut: TeacherRegisterPresenceUseCase
 
   beforeEach(() => {
@@ -86,6 +92,8 @@ describe('TeacherRegisterPresenceUseCase', () => {
       sendAbsenceAlert: vi.fn().mockResolvedValue(undefined),
     } as any
 
+    validator = makeValidator()
+
     sut = new TeacherRegisterPresenceUseCase(
       classRepository,
       studentRepository,
@@ -93,7 +101,8 @@ describe('TeacherRegisterPresenceUseCase', () => {
       attendanceRepository,
       userRepository,
       notificationRepository,
-      emailService
+      emailService,
+      validator
     )
   })
 

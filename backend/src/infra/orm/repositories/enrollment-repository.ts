@@ -14,11 +14,28 @@ export class EnrollmentTypeormRepository implements EnrollmentRepository {
     return this.toEnrollment(entity)
   }
 
-  async findByStudentAndClass(studentId: string, classId: string): Promise<Enrollment | null> {
+  async findByStudentAndClass(studentId: string, classId: string, status?: EnrollmentStatus | null): Promise<Enrollment | null> {
     const repo = this.dataSource.getRepository(EnrollmentEntity)
-    const entity = await repo.findOne({ where: { studentId, classId } })
+    const where: any = { studentId, classId }
+    if (status !== undefined) {
+      if (status !== null) {
+        where.status = status
+      }
+    } else {
+      where.status = EnrollmentStatus.ACTIVE
+    }
+    const entity = await repo.findOne({ where })
     if (!entity) return null
     return this.toEnrollment(entity)
+  }
+
+  async findActiveByClass(classId: string): Promise<Enrollment[]> {
+    const repo = this.dataSource.getRepository(EnrollmentEntity)
+    const entities = await repo.find({
+      where: { classId, status: EnrollmentStatus.ACTIVE },
+      order: { createdAt: 'ASC' },
+    })
+    return entities.map((e) => this.toEnrollment(e))
   }
 
   async countActiveEnrollmentsByClass(classId: string): Promise<number> {
@@ -80,6 +97,12 @@ export class EnrollmentTypeormRepository implements EnrollmentRepository {
   async deleteById(id: string): Promise<void> {
     const repo = this.dataSource.getRepository(EnrollmentEntity)
     await repo.delete({ id })
+  }
+
+  async findByStudent(studentId: string): Promise<Enrollment[]> {
+    const repo = this.dataSource.getRepository(EnrollmentEntity)
+    const entities = await repo.find({ where: { studentId }, order: { createdAt: 'DESC' } })
+    return entities.map((e) => this.toEnrollment(e))
   }
 
   private toEnrollment(entity: EnrollmentEntity): Enrollment {

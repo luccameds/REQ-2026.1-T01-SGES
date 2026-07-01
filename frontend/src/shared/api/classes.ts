@@ -20,12 +20,20 @@ export interface ClassDto {
   studentsCount?: number;
 }
 
-export type AttendanceStatus = 'PRESENT' | 'ABSENT' | 'FT';
+export type AttendanceStatus = 'PRESENT' | 'ABSENT' | 'JUSTIFIED' | 'FT';
 
 export interface AttendanceInput {
   studentId: string;
   status: AttendanceStatus;
   justification?: string;
+}
+
+export interface AttendanceEntryDto {
+  studentId: string;
+  studentName: string;
+  status: AttendanceStatus | null;
+  observacao: string | null;
+  justificativaDetalhes: string | null;
 }
 
 export const classesApi = {
@@ -39,9 +47,24 @@ export const classesApi = {
     return data;
   },
 
+  async getAttendance(classId: string, date: string): Promise<AttendanceEntryDto[]> {
+    const { data } = await apiClient.get<AttendanceEntryDto[]>('/attendance', {
+      params: { classId, date },
+    });
+    return data;
+  },
+
   async saveAttendance(classId: string, date: string, attendances: AttendanceInput[]): Promise<void> {
     await apiClient.post(`/classes/${classId}/attendances`, {
       date,
+      attendances,
+    });
+  },
+
+  async updateAttendance(classId: string, date: string, justificativaDetalhes: string, attendances: AttendanceInput[]): Promise<void> {
+    await apiClient.put(`/classes/${classId}/attendances`, {
+      date,
+      justificativaDetalhes,
       attendances,
     });
   },
@@ -85,16 +108,46 @@ export const classesApi = {
 
 export const usersApi = {
   async getAll(): Promise<{ users: UserDto[] }> {
-    const { data } = await apiClient.get<{ users: UserDto[] }>('/users');
-    return data;
+    const { data } = await apiClient.get<{ users?: Array<{ id: string; name: string; email: string; role: string }>; data?: Array<{ id: string; name: string; email: string; role: string }> }>('/users');
+    const rawList = data.users || data.data || [];
+    const usersList = rawList.map((u) => ({
+      id: u.id,
+      name: u.name,
+      email: u.email,
+      role: (u.role?.toLowerCase() === 'admin' ? 'admin' : 'volunteer') as 'admin' | 'volunteer',
+    }));
+    return { users: usersList };
   },
 
   async create(input: { name: string; email: string; role: 'admin' | 'volunteer' }): Promise<UserDto> {
-    const { data } = await apiClient.post<UserDto>('/users', input);
-    return data;
+    const backendRole = input.role === 'admin' ? 'ADMIN' : 'TEACHER';
+    const { data } = await apiClient.post<{ id: string; name: string; email: string; role: string }>('/users', {
+      ...input,
+      role: backendRole,
+    });
+    return {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      role: data.role?.toLowerCase() === 'admin' ? 'admin' : 'volunteer',
+    };
   },
 
   async delete(id: string): Promise<void> {
     await apiClient.delete(`/users/${id}`);
+  },
+
+  async update(id: string, input: { name: string; email: string; role: 'admin' | 'volunteer' }): Promise<UserDto> {
+    const backendRole = input.role === 'admin' ? 'ADMIN' : 'TEACHER';
+    const { data } = await apiClient.put<{ id: string; name: string; email: string; role: string }>(`/users/${id}`, {
+      ...input,
+      role: backendRole,
+    });
+    return {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      role: data.role?.toLowerCase() === 'admin' ? 'admin' : 'volunteer',
+    };
   },
 };
