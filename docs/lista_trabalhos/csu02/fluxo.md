@@ -1,82 +1,82 @@
 # SGES
-## Especificação de Caso de Uso: CSU02 (RF02) - Redefinir senha de acesso
+## CSU02 (RF02) — Redefinir senha de acesso
 
 [Matriz de Priorização](../../matriz_de_acao_e_priorizacao.md) <br>
 [Andamento](../andamento.md) <br>
-[Cronograma e Planejamento](../../cronograma_e_entregas.md#tabela-de-cronograma-e-planejamento)
+[Cronograma e Planejamento](../../planejamento_organizacao/cronograma_e_entregas.md#tabela-de-cronograma-e-planejamento)
+
 
 ---
 
-### 1. Breve Descrição
-Permitir ao usuário a recuperação do acesso ao sistema mediante o envio de um link seguro com token temporário de redefinição de senha.
+### Objetivo:
+Permitir ao usuário a recuperação do acesso ao sistema mediante o envio de um código de verificação temporário de redefinição de senha.
 
----
+### Ator principal:
+Usuário
 
-### 2. Fluxo Básico de Eventos
-1. O usuário acessa a página de login do SGES e clica em 'Esqueci minha senha'.
+### Atores secundários:
+Servidor de E-mail
+
+### Pré-condições:
+O usuário deve possuir uma conta ativa associada ao e-mail informado.
+
+### Fluxo principal:
+1. O usuário acessa a página de login do SGES e solicita a redefinição de senha.
 2. O sistema solicita o e-mail cadastrado do usuário.
-3. O usuário informa o e-mail e clica em 'Enviar'.
-4. O sistema valida se o e-mail informado pertence a uma conta ativa. [[FE-4-A](#fe-4-a-e-mail-nao-cadastrado), [FE-4-B](#fe-4-b-dados-invalidos-e-mail), [FE-4-C](#fe-4-c-falha-de-persistencia-envio)]
-5. O sistema gera um token temporário com validade de 15 minutos.
-6. O sistema envia um e-mail contendo o link seguro de redefinição com o token em até 1 minuto.
-7. O usuário acessa o link seguro através do e-mail recebido e é direcionado para a tela de criação de nova senha. [[FE-7-A](#fe-7-a-linktoken-expirado), [FE-7-B](#fe-7-b-linktoken-invalido)]
-8. O usuário insere a nova senha, confirma e clica em 'Salvar'.
-9. O sistema valida as diretrizes de segurança da nova senha e a armazena de forma criptografada. [[FE-9-A](#fe-9-a-dados-invalidos-senha), [FE-9-B](#fe-9-b-falha-de-persistencia-gravacao)]
-10. O sistema invalida o token de redefinição e redireciona o usuário para a tela de login.
+3. O usuário informa o e-mail e confirma a operação.
+4. O sistema valida se o e-mail informado pertence a uma conta ativa. (RN02-01; RN02-04; FE-4-A; FE-4-B; FE-4-C)
+5. O sistema gera um código de verificação temporário com validade de 30 minutos. (RN02-02)
+6. O sistema envia um e-mail contendo o código de verificação em até 1 minuto. (RN02-03)
+7. O usuário insere o código de verificação recebido e confirma a operação.
+8. O sistema valida o código de verificação e solicita a criação da nova senha. (FE-8-A; FE-8-B)
+9. O usuário insere a nova senha, confirma e solicita o salvamento.
+10. O sistema valida as diretrizes de segurança da nova senha e a armazena de forma criptografada. (RNF01; FE-10-A; FE-10-B)
+11. O sistema invalida o código de redefinição e redireciona o usuário para página login.
 
----
-
-### 3. Fluxos Alternativos
+### Fluxos alternativos:
 Não há fluxos alternativos identificados.
 
----
+### Fluxos de exceção:
+#### FE-4-A — E-mail não Cadastrado
+Este fluxo inicia no passo 4 do fluxo principal. Se o e-mail não estiver cadastrado no sistema, para evitar a varredura e descoberta de usuários legítimos, o sistema exibe a mesma mensagem de sucesso padrão (que um código foi enviado se o e-mail existir), mas não dispara nenhuma mensagem eletrônica. O caso de uso é encerrado.
 
-### 4. Fluxos de Exceção
-#### FE-4-A - E-mail não Cadastrado
-No passo 4, se o e-mail não estiver cadastrado no sistema, para evitar a varredura e descoberta de usuários legítimos, o sistema exibe a mesma mensagem de sucesso padrão (que um link foi enviado se o e-mail existir), mas não dispara nenhuma mensagem eletrônica.
+#### FE-4-B — Dados Inválidos (E-mail)
+Este fluxo inicia no passo 4 do fluxo principal. Se o formato do e-mail fornecido for inválido, o sistema bloqueia o envio, exibe um alerta de validação de formato e solicita a correção. O fluxo retorna ao passo 2 do fluxo principal.
 
-#### FE-4-B - Dados Inválidos (E-mail)
-No passo 4, se o formato do e-mail fornecido for inválido, o sistema bloqueia o envio, exibe um alerta de validação de formato e solicita a correção.
+#### FE-4-C — Falha de Persistência (Envio)
+Este fluxo inicia no passo 4 do fluxo principal. Se houver falha de rede/comunicação com a base de dados ou com o servidor de envio de e-mails, o sistema impede a operação e exibe um alerta de indisponibilidade de serviço. O caso de uso é encerrado.
 
-#### FE-4-C - Falha de Persistência (Envio)
-No passo 4, se houver falha de rede/comunicação com a base de dados ou com o servidor de envio de e-mails, o sistema impede a operação e exibe um alerta de indisponibilidade de serviço.
+#### FE-8-A — Código Expirado
+Este fluxo inicia no passo 8 do fluxo principal. Se o usuário tentar redefinir a senha utilizando um código que já expirou (mais de 30 minutos desde o envio), o sistema impede a ação, exibe uma mensagem de erro orientando a realizar uma nova solicitação. O fluxo retorna ao passo 2 do fluxo principal.
 
-#### FE-7-A - Link/Token Expirado
-No passo 7, se o usuário tentar redefinir a senha utilizando um link cujo token já expirou (mais de 15 minutos desde o envio), o sistema impede a ação e exibe uma mensagem de erro orientando a realizar uma nova solicitação.
+#### FE-8-B — Código Inválido
+Este fluxo inicia no passo 8 do fluxo principal. Se o usuário tentar redefinir a senha utilizando um código inválido, o sistema impede a ação e exibe uma mensagem de erro orientando a realizar uma nova solicitação. O fluxo retorna ao passo 2 do fluxo principal.
 
-#### FE-7-B - Link/Token Inválido
-No passo 7, se o usuário tentar redefinir a senha utilizando um link cujo token é inválido (formato incorreto, adulterado ou inexistente), o sistema impede a ação e exibe uma mensagem de erro orientando a realizar uma nova solicitação.
+#### FE-10-A — Dados Inválidos
+Este fluxo inicia no passo 10 do fluxo principal. Se a nova senha informada não atender aos critérios mínimos de segurança (ex: tamanho mínimo, caracteres obrigatórios), o sistema impede o salvamento e solicita a correção. O fluxo retorna ao passo 9 do fluxo principal.
 
-#### FE-9-A - Dados Inválidos (Senha)
-No passo 9, se a nova senha informada não cumprir os requisitos mínimos de segurança (ex: menos de 4 caracteres), o sistema bloqueia a gravação e apresenta um alerta descrevendo a falha na diretriz de senhas.
+#### FE-10-B — Falha de Persistência
+Este fluxo inicia no passo 10 do fluxo principal. Se ocorrer um erro técnico de gravação no banco de dados, o sistema impede a atualização da senha, exibe um alerta de erro e mantém os dados originais intactos. O caso de uso é encerrado.
 
-#### FE-9-B - Falha de Persistência (Gravação)
-No passo 9, se houver uma falha de conexão com a base de dados no momento da gravação da senha, o sistema bloqueia a ação, exibe uma mensagem de erro de gravação e mantém os dados anteriores.
+### Regras de negócio:
+#### RN02-01 — Validação de Conta Ativa
+O código de recuperação de senha só é gerado para e-mails associados a contas ativas no sistema.
 
----
+#### RN02-02 — Tempo de Expiração de Código
+O código temporário de redefinição de senha expira automaticamente após 30 minutos de sua geração.
 
-### 5. Pré-Condições
-* O usuário deve possuir uma conta ativa associada ao e-mail informado.
+#### RN02-03 — Tempo de Envio de E-mail
+O e-mail com o código de redefinição deve ser enviado ao usuário em no máximo 1 minuto.
 
----
+#### RN02-04 — Prevenção de Descoberta de Usuários
+Se o e-mail informado não existir, o sistema exibe a mensagem de sucesso padrão para evitar a varredura de usuários válidos (sem enviar e-mail).
 
-### 6. Pós-Condições
-* A senha do usuário é atualizada de forma segura no banco de dados e o token temporário utilizado é invalidado.
+### Requisitos não funcionais:
+#### RNF01 — Criptografia Sensível
+A nova senha cadastrada deve ser hasheada utilizando algoritmos seguros antes de ser persistida.
 
----
-
-### 7. Pontos de Extensão
-Nenhum ponto de extensão identificado.
-
----
-
-### 8. Requisitos Especiais
-* RNF01 - Criptografia Sensível: A nova senha deve ser hasheada de forma segura antes de ser persistida no banco de dados.
-* Envio do e-mail em até 1 minuto após a solicitação.
-
----
-
-### 9. Informações Adicionais
+### Pós-condições:
+A senha do usuário é atualizada de forma segura no banco de dados e o código temporário utilizado é invalidado.
 
 #### Protótipo de Tela (DoR)
 
