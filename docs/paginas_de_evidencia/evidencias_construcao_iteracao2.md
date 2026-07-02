@@ -40,12 +40,6 @@ Seguindo o processo ágil e unificado do **OpenUP**, detalhamos abaixo as cerim�
     * Link para os [Itens de Trabalho Priorizados](../matriz_de_acao_e_priorizacao.md) mapeados para esta janela de tempo.
     * [Ata do plano de iteração](../atas/atas_planos_iteracao/ata_plano_iteracao_construcao2.md)
 
-### Alinhamento Assíncrono e Interações Frequentes
-* **Execução:** Como a equipe manteve a comunicação diária ou assíncrona para resolver impedimentos e atualizar o status das tarefas, dada a dinâmica distribuída do grupo.
-* **Evidências:**
-    * Prints de alinhamentos no canal de comunicação da equipe (Discord/WhatsApp/Teams).
-    * Histórico de discussões em *Issues* ou *Pull Requests* do GitHub.
-
 ### Avaliação e Revisão da Iteração (Assess Iteration)
 * **Execução:** Demonstração dos resultados alcançados (funcionalidades prontas ou documentos validados) e análise do cumprimento dos critérios de aceitação.
 * **Evidências:**

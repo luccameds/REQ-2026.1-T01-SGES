@@ -11,7 +11,7 @@
 ### **1. OBJETIVOS DA ITERAÇÃO**
 Com a aprovação conceitual do MVP estabelecida na fase anterior, a equipe definiu as metas de desenvolvimento de software para esta iteração:
 <br/>
-1. **Desenvolvimento do Core:** Iniciar a codificação das funcionalidades estruturais após a estabilização do escopo.
+1. **Desenvolvimento do MVP:** Iniciar a codificação das funcionalidades estruturais após a estabilização do escopo.
 <br/>
 2. **Controle de Acesso Seguro:** Implementar o mecanismo funcional de login e controle de níveis de permissão com base no perfil de cada usuário.
 <br/>
