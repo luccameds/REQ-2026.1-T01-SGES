@@ -15,7 +15,7 @@ Nesta iteração, aplicamos técnicas de Engenharia de Requisitos para compreend
 * **Descrição:** Breve explicação de como a técnica foi aplicada com o cliente ou partes interessadas.
 * **Evidências:**
     * Link ou referência para a [Ata de Reunião](../reuniao_de_requisitos.md) ou transcrição onde a técnica ocorreu.
-    * Print ou link de boards (ex: Miro/Trello) utilizados durante a dinâmica.
+    * [Ata do plano de iteração](../atas/atas_planos_iteracao/ata_plano_iteracao_transicao.md)
 
 ### [Técnica 2: Ex: Modelagem de Casos de Uso / Especificação de Requisitos]
 * **Descrição:** Como os dados coletados foram traduzidos em especificações técnicas de requisitos.

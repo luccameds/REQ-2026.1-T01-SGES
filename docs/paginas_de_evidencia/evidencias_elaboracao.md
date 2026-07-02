@@ -38,8 +38,7 @@ Seguindo o processo ágil e unificado do **OpenUP**, detalhamos abaixo as cerim�
 * **Execução:** Definição dos objetivos da iteração, atribuição de tarefas e avaliação dos riscos mapeados.
 * **Evidências:**
     * Link para os [Itens de Trabalho Priorizados](../matriz_de_acao_e_priorizacao.md) mapeados para esta janela de tempo.
-    * *[Opcional]* Print ou link do quadro de tarefas (Jira/Trello) no início da iteração.
-
+    * Link ou referência para a [Ata do plano de iteração](../atas/atas_planos_iteracao/ata_plano_iteracao_elaboracao.md), onde os principais pontos foram discutidos.
 ### Alinhamento Assíncrono e Interações Frequentes
 * **Execução:** Como a equipe manteve a comunicação diária ou assíncrona para resolver impedimentos e atualizar o status das tarefas, dada a dinâmica distribuída do grupo.
 * **Evidências:**
