@@ -24,7 +24,7 @@ O usuário deve possuir uma conta ativa associada ao e-mail informado.
 1. O usuário acessa a página de login do SGES e solicita a redefinição de senha.
 2. O sistema solicita o e-mail cadastrado do usuário.
 3. O usuário informa o e-mail e confirma a operação.
-4. O sistema valida se o e-mail informado pertence a uma conta ativa. (RN02-01; RN02-04; FE-4-A)
+4. O sistema valida se o e-mail informado pertence a uma conta ativa. (RN02-01; RN02-04; FE-4-A; FE-4-B; FE-4-C)
 5. O sistema gera um código de verificação temporário com validade de 30 minutos. (RN02-02)
 6. O sistema envia um e-mail contendo o código de verificação em até 1 minuto. (RN02-03)
 7. O usuário insere o código de verificação recebido e confirma a operação.
@@ -38,23 +38,24 @@ Não há fluxos alternativos identificados.
 
 ### Fluxos de exceção:
 #### FE-4-A — E-mail não Cadastrado
-
 Este fluxo inicia no passo 4 do fluxo principal. Se o e-mail não estiver cadastrado no sistema, para evitar a varredura e descoberta de usuários legítimos, o sistema exibe a mesma mensagem de sucesso padrão (que um código foi enviado se o e-mail existir), mas não dispara nenhuma mensagem eletrônica. O caso de uso é encerrado.
 
-#### FE-8-A — Código Expirado
+#### FE-4-B — Dados Inválidos (E-mail)
+Este fluxo inicia no passo 4 do fluxo principal. Se o formato do e-mail fornecido for inválido, o sistema bloqueia o envio, exibe um alerta de validação de formato e solicita a correção. O fluxo retorna ao passo 2 do fluxo principal.
 
+#### FE-4-C — Falha de Persistência (Envio)
+Este fluxo inicia no passo 4 do fluxo principal. Se houver falha de rede/comunicação com a base de dados ou com o servidor de envio de e-mails, o sistema impede a operação e exibe um alerta de indisponibilidade de serviço. O caso de uso é encerrado.
+
+#### FE-8-A — Código Expirado
 Este fluxo inicia no passo 8 do fluxo principal. Se o usuário tentar redefinir a senha utilizando um código que já expirou (mais de 30 minutos desde o envio), o sistema impede a ação, exibe uma mensagem de erro orientando a realizar uma nova solicitação. O fluxo retorna ao passo 2 do fluxo principal.
 
 #### FE-8-B — Código Inválido
-
 Este fluxo inicia no passo 8 do fluxo principal. Se o usuário tentar redefinir a senha utilizando um código inválido, o sistema impede a ação e exibe uma mensagem de erro orientando a realizar uma nova solicitação. O fluxo retorna ao passo 2 do fluxo principal.
 
 #### FE-10-A — Dados Inválidos
-
 Este fluxo inicia no passo 10 do fluxo principal. Se a nova senha informada não atender aos critérios mínimos de segurança (ex: tamanho mínimo, caracteres obrigatórios), o sistema impede o salvamento e solicita a correção. O fluxo retorna ao passo 9 do fluxo principal.
 
 #### FE-10-B — Falha de Persistência
-
 Este fluxo inicia no passo 10 do fluxo principal. Se ocorrer um erro técnico de gravação no banco de dados, o sistema impede a atualização da senha, exibe um alerta de erro e mantém os dados originais intactos. O caso de uso é encerrado.
 
 ### Regras de negócio:

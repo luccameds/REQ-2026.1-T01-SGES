@@ -1047,16 +1047,10 @@ export function setupMockApi(): void {
             const justifiedCount = classAtts.filter((a) => a.status === 'JUSTIFIED' || a.status === 'FT').length;
             const attendanceRate = totalClasses > 0 ? Math.round((presenceCount / totalClasses) * 100) : 100;
 
-            const maskString = (s: string) => {
-              if (!s) return '';
-              const parts = s.split(' ');
-              return parts.map(p => p.length > 1 ? p[0] + '*'.repeat(Math.min(p.length - 1, 4)) : p).join(' ');
-            };
-
             result.push({
               studentId: student.id,
-              studentName: maskString(student.name),
-              studentEmail: student.email.split('@')[0].substring(0, 2) + '***@' + student.email.split('@')[1],
+              studentName: student.name,
+              studentEmail: student.email,
               codigoMatricula: student.codigo_matricula,
               classId: c.id,
               className: c.nomeCurso,

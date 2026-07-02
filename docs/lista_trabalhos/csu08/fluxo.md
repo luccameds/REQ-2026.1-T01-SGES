@@ -21,10 +21,10 @@ Nenhum
 O Gestor deve estar autenticado e os instrutores que serão alocados devem estar cadastrados e ativos.
 
 ### Fluxo principal:
-1. O Gestor acessa a seção de turmas e solicita o cadastro de uma nova turma.
+1. O Gestor acessa a seção de turmas e solicita o cadastro de uma nova turma. (FE-1-A)
 2. O sistema exibe o formulário solicitando: Nome, Dias da Semana, Horário, Limite de Vagas, Livros Estudados (opcional) e Instrutor Responsável.
 3. O Gestor preenche as informações e confirma a operação.
-4. O sistema realiza as validações de consistência e alocação. (RN08-01; RN08-02; RN08-03; FE-4-A; FE-4-B; FE-4-C)
+4. O sistema realiza as validações de consistência e alocação. (RN08-01; RN08-02; RN08-03; FE-4-A; FE-4-B; FE-4-C; FE-4-D; FE-4-E)
 5. O sistema salva a nova turma na base de dados. (FE-5-A)
 6. O sistema exibe mensagem de confirmação de cadastro e a disponibiliza no catálogo.
 
@@ -32,21 +32,25 @@ O Gestor deve estar autenticado e os instrutores que serão alocados devem estar
 Não há fluxos alternativos identificados.
 
 ### Fluxos de exceção:
+#### FE-1-A — Permissão Insuficiente
+Este fluxo inicia no passo 1 do fluxo principal. Se o usuário logado não for um administrador ou gestor autorizado, o acesso à tela de cadastro é bloqueado e o sistema retorna erro de permissão insuficiente. O caso de uso é encerrado.
 
 #### FE-4-A — Limite de Vagas Inválido
-
 Este fluxo inicia no passo 4 do fluxo principal. Se o limite de vagas informado não for um número inteiro positivo, o sistema emite um erro e impede o cadastro. O fluxo retorna ao passo 3 do fluxo principal.
 
 #### FE-4-B — Instrutor Inativo
-
 Este fluxo inicia no passo 4 do fluxo principal. Se o instrutor escolhido não estiver ativo, o sistema emite um alerta e solicita a escolha de outro profissional. O fluxo retorna ao passo 3 do fluxo principal.
 
 #### FE-4-C — Conflito de Agenda do Instrutor
-
 Este fluxo inicia no passo 4 do fluxo principal. Se o instrutor escolhido já estiver alocado em outra turma ativa no mesmo dia e faixa de horário, o sistema emite um alerta e solicita a escolha de outro profissional ou horário. O fluxo retorna ao passo 3 do fluxo principal.
 
-#### FE-5-A — Falha de Persistência
+#### FE-4-D — Dados Inválidos
+Este fluxo inicia no passo 4 do fluxo principal. Se algum campo obrigatório (como Nome da Turma) estiver em branco ou contiver caracteres inválidos, o sistema bloqueia a gravação e solicita preenchimento correto. O fluxo retorna ao passo 3 do fluxo principal.
 
+#### FE-4-E — Duplicidade de Turma
+Este fluxo inicia no passo 4 do fluxo principal. Se o sistema identificar uma turma já existente com o mesmo nome da oficina, horários, dias da semana e semestre letivo, a criação é bloqueada para evitar duplicidade. O fluxo retorna ao passo 3 do fluxo principal.
+
+#### FE-5-A — Falha de Persistência
 Este fluxo inicia no passo 5 do fluxo principal. Se houver falha de infraestrutura ao tentar salvar a turma no banco, a transação é revertida, exibindo erro ao Gestor. O caso de uso é encerrado.
 
 ### Regras de negócio:

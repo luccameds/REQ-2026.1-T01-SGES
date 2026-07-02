@@ -6,7 +6,6 @@ import { useIdleTimer } from '@/shared/hooks/useIdleTimer';
 import { IdleTimerModal } from '@/shared/components/IdleTimerModal';
 import { notificationsApi, type NotificationDto } from '@/shared/api/notifications';
 import {
-  Layers,
   LayoutDashboard,
   ClipboardList,
   BookOpen,
@@ -156,11 +155,9 @@ export const DashboardLayout: React.FC = () => {
           {/* Brand */}
           <div className="flex items-center justify-between px-5 py-5 border-b border-border/30">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary/10 rounded-xl">
-                <Layers className="w-6 h-6 text-primary" />
-              </div>
+              <img src="/logo.png" className="w-9 h-9 rounded-xl shadow-sm" alt="Auta de Sousa" />
               <div>
-                <span className="text-base font-bold text-foreground tracking-tight">SGES</span>
+                <span className="text-base font-bold text-foreground tracking-tight">Auta de Sousa</span>
                 <p className="text-[10px] text-muted-foreground leading-tight">Gestão de Impacto Social</p>
               </div>
             </div>

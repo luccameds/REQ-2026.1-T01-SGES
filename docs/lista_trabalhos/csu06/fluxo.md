@@ -21,10 +21,10 @@ Nenhum
 O usuário (Gestor ou Instrutor) deve estar autenticado no sistema.
 
 ### Fluxo principal:
-1. O usuário acessa o menu de beneficiários e solicita o cadastro de um novo beneficiário.
+1. O usuário acessa o menu de beneficiários e solicita o cadastro de um novo beneficiário. (FE-1-A)
 2. O sistema apresenta o formulário de cadastro solicitando: Nome Completo, E-mail e Profissão.
 3. O usuário insere as informações requeridas e confirma a operação. (RN06-01)
-4. O sistema valida o preenchimento dos dados obrigatórios. (RN06-01; FE-4-A)
+4. O sistema valida o preenchimento dos dados obrigatórios e a unicidade/formato das informações. (RN06-01; FE-4-A; FE-4-B; FE-4-C)
 5. O sistema armazena o cadastro com o status de beneficiário ativo de forma segura e gera um identificador único (ID). (RNF01; FE-5-A)
 6. O sistema exibe uma mensagem de confirmação de cadastro bem-sucedido.
 
@@ -32,13 +32,19 @@ O usuário (Gestor ou Instrutor) deve estar autenticado no sistema.
 Não há fluxos alternativos identificados.
 
 ### Fluxos de exceção:
+#### FE-1-A — Permissão Insuficiente
+Este fluxo inicia no passo 1 do fluxo principal. Se o perfil do usuário logado não for autorizado a gerenciar beneficiários, o sistema bloqueia o acesso à tela e retorna mensagem de erro de permissão insuficiente. O caso de uso é encerrado.
 
 #### FE-4-A — Dados Obrigatórios Ausentes
-
 Este fluxo inicia no passo 4 do fluxo principal. Se o Nome Completo não for preenchido, o sistema cancela a operação, indica o erro na tela e solicita a correção. O fluxo retorna ao passo 3 do fluxo principal.
 
-#### FE-5-A — Falha de Persistência
+#### FE-4-B — E-mail já Cadastrado
+Este fluxo inicia no passo 4 do fluxo principal. Se o e-mail informado já estiver cadastrado para outro beneficiário, o sistema bloqueia o registro, exibe mensagem de duplicidade de e-mail e solicita a correção. O fluxo retorna ao passo 3 do fluxo principal.
 
+#### FE-4-C — Dados Inválidos
+Este fluxo inicia no passo 4 do fluxo principal. Se o formato do e-mail do beneficiário ou do responsável estiver inválido, o sistema impede a gravação, exibe erros específicos de formatação e solicita a correção. O fluxo retorna ao passo 3 do fluxo principal.
+
+#### FE-5-A — Falha de Persistência
 Este fluxo inicia no passo 5 do fluxo principal. Se ocorrer uma falha ao tentar salvar os dados no banco de dados, o sistema interrompe a transação e exibe um alerta de falha de conexão ou gravação. O caso de uso é encerrado.
 
 ### Regras de negócio:

@@ -30,9 +30,7 @@ O usuário deve estar devidamente autenticado e possuir uma sessão ativa.
 Este fluxo inicia antes do passo 1 do fluxo principal, quando o sistema detecta 15 minutos consecutivos de inatividade do usuário a sessão ativa é invalidada automaticamente e redireciona o usuário para a interface de login, exibindo um alerta informando que a sessão expirou. (RNF06)
 
 ### Fluxos de exceção:
-
 #### FE-2-A — Falha de Comunicação / Persistência
-
 Este fluxo inicia no passo 2 do fluxo principal. Se ocorrer uma falha ao tentar se comunicar com o servidor para registrar a requisição de logout, as credenciais e dados locais são removidos de qualquer forma para garantir a segurança do terminal local. O caso de uso é encerrado.
 
 ### Requisitos não funcionais:

@@ -21,32 +21,34 @@ Nenhum
 O usuário está autenticado e o beneficiário a ser editado já se encontra registrado no sistema.
 
 ### Fluxo principal:
-1. O usuário busca pelo beneficiário desejado no sistema e abre sua ficha cadastral. (FE-1-A)
+1. O usuário busca pelo beneficiário desejado no sistema e abre sua ficha cadastral. (FA-1-A; FE-1-A; FE-1-B)
 2. O usuário edita os campos necessários no formulário.
 3. O usuário confirma a operação.
-4. O sistema valida a conformidade das informações atualizadas. (RN07-01; FE-4-A; FE-4-B)
+4. O sistema valida a conformidade das informações atualizadas. (RN07-01; FE-4-A; FE-4-B; FE-4-C)
 5. O sistema persiste os novos dados na base de dados aplicando as devidas proteções. (RNF01; FE-5-A)
 6. O sistema exibe mensagem de sucesso e atualiza a exibição com os dados modificados.
 
 ### Fluxos alternativos:
-Não há fluxos alternativos identificados.
+#### FA-1-A — Lista Vazia
+Este fluxo inicia no passo 1 do fluxo principal. Se o sistema não possuir beneficiários cadastrados ou se a busca realizada não retornar nenhum registro, o sistema exibe uma mensagem informativa de busca vazia ("Nenhum beneficiário encontrado"). O caso de uso é suspenso.
 
 ### Fluxos de exceção:
-
 #### FE-1-A — Item Inexistente
+Este fluxo inicia no passo 1 do fluxo principal. Se o beneficiário selecionado não for encontrado na base de dados (deletado concomitantemente por outro usuário), o sistema interrompe a edição e exibe um erro de registro inexistente. O caso de uso é encerrado.
 
-Este fluxo inicia no passo 1 do fluxo principal. Se o beneficiário selecionado não for encontrado na base de dados, o sistema interrompe a edição e exibe um erro de registro inexistente. O caso de uso é encerrado.
+#### FE-1-B — Permissão Insuficiente
+Este fluxo inicia no passo 1 do fluxo principal. Se o usuário logado não possuir privilégios autorizados para editar registros, o sistema impede o carregamento da ficha cadastral e retorna mensagem de erro de permissão insuficiente. O caso de uso é encerrado.
 
 #### FE-4-A — Remoção de Informação Obrigatória
-
 Este fluxo inicia no passo 4 do fluxo principal. Se alguma informação obrigatória for removida deixando o campo em branco, o sistema impede o salvamento e solicita o preenchimento. O fluxo retorna ao passo 2 do fluxo principal.
 
 #### FE-4-B — Formato de Dados Incorreto
+Este fluxo inicia no passo 4 do fluxo principal. Se o e-mail estiver em formato inválido ou outros dados em formatos incorretos, o sistema impede o salvamento e solicita a correção. O fluxo retorna ao passo 2 do fluxo principal.
 
-Este fluxo inicia no passo 4 do fluxo principal. Se o e-mail estiver em formato inválido, o sistema impede o salvamento e solicita a correção. O fluxo retorna ao passo 2 do fluxo principal.
+#### FE-4-C — E-mail/Dados Duplicados
+Este fluxo inicia no passo 4 do fluxo principal. Se o e-mail (ou CPF, se alterado) atualizado já estiver cadastrado para outro beneficiário na base de dados, o sistema impede o salvamento, exibe mensagem de erro de duplicidade e solicita a correção. O fluxo retorna ao passo 2 do fluxo principal.
 
 #### FE-5-A — Falha de Persistência
-
 Este fluxo inicia no passo 5 do fluxo principal. Se ocorrer uma falha ao persistir a ficha editada no banco de dados, o sistema cancela a edição e exibe uma mensagem de erro. O caso de uso é encerrado.
 
 ### Regras de negócio:
