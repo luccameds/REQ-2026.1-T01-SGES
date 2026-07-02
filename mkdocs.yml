@@ -49,6 +49,7 @@ nav:
 
   - "Gestão de Produto":
       - "Lista de Requisitos": "lista_requisitos.md"
+      - "Catálogo de Regras de Negócio": "catalogo_regras_negocio.md"
       - "Itens de Trabalho e priorização": "matriz_de_acao_e_priorizacao.md"
       - "Arquitetura do Produto": "arquitetura_do_produto.md"
       - "Casos de Uso":
